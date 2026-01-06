@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zixuan's Portfolio | Undergraduate Admissions 2025</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX Parsing -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        
+        // Lucide Icon Component Wrapper
+        const Icon = ({ name, size = 18, className = "" }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
+        };
+
+        const PortfolioApp = () => {
+            const [activeCategory, setActiveCategory] = useState('All');
+
+            const categories = [
+                { id: 'All', label: 'All', icon: 'hash' },
+                { id: 'Research', label: 'Research & STEM', icon: 'book' },
+                { id: 'Creativity', label: 'Origami & Arts', icon: 'scissors' },
+                { id: 'Diplomacy', label: 'Strategy & Diplomacy', icon: 'globe' },
+                { id: 'Service', label: 'Service & Exploration', icon: 'heart' },
+            ];
+
+            const items = [
+                {
+                    id: 1,
+                    title: "Acoustic Feature Analysis & Machine Learning",
+                    date: "Dec 2024",
+                    category: "Research",
+                    tag: "Global Gold Medal",
+                    description: "Developed a non-invasive counting method for objects in sealed containers using CNNs and MFCC feature extraction. Supervised by Prof. Dong Zhang (NJU).",
+                    reflection: "Winning the S.-T. Yau High School Science Award Global Gold Medal validated my belief in bridging classical acoustics with AI. Published in the Cambridge Journal for Junior Scientists.",
+                    imageUrl: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 2,
+                    title: "Quantum Entanglement & Bell's Inequality",
+                    date: "2024",
+                    category: "Research",
+                    tag: "Quantum Physics",
+                    description: "Constructed a bulk-optics setup to produce entangled photon pairs via Type-II SPDC. Verified quantum non-locality by measuring a Bell parameter (S) of 2.4871.",
+                    reflection: "Supervised by Prof. Xiaosong Ma, this project turned abstract mathematical paradoxes into visceral physical reality. It provided a rigorous foundation in coincidence counting.",
+                    imageUrl: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 3,
+                    title: "Steven’s Kitchen: Culinary Alchemy",
+                    date: "Ongoing",
+                    category: "Service",
+                    tag: "Community",
+                    description: "Operating a home-based kitchen project exploring the thermodynamics of flavor. Balancing the 18 pleats of a Xiaolongbao and the precision of heat transfer.",
+                    reflection: "Cooking is the most intimate form of applied physics. It taught me how to host and build community, turning the rigid laws of thermodynamics into a language of warmth.",
+                    imageUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 4,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2024",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "Designed 35 hands-on physics modules for children in Shuangbai. Transformed cafeteria trays into ripple tanks for experiential learning.",
+                    reflection: "I realized that the children didn't need me to impose formulas. My role was to provide the 'soil'—the environment—for their natural curiosity to bloom.",
+                    imageUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 5,
+                    title: "Acoustic Flame Suppression Mechanisms",
+                    date: "2024",
+                    category: "Research",
+                    tag: "Fluid Dynamics",
+                    description: "Investigated vortex-induced oxygen contraction via sound waves. Utilized Schlieren imaging to map frequency-power relationships.",
+                    reflection: "Discovering that 'blowing out' a fire is actually a vortex-induced starvation process taught me to look beneath surface flow patterns for fundamental dynamics.",
+                    imageUrl: "https://images.unsplash.com/photo-1534229317257-684295982e53?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 6,
+                    title: "Atmospheric Pressure & the Ruler Trick",
+                    date: "2023",
+                    category: "Research",
+                    tag: "Classical Mechanics",
+                    description: "Analyzed cantilevered ruler stability during collisions. Quantified transient low-pressure zones using Tracker motion analysis.",
+                    reflection: "Proved that torque balance is governed by a 1.79 N·m atmospheric force. It reinforced the power of invisible variables in seemingly simple systems.",
+                    imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da07bb5e?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 7,
+                    title: "Droplet Microscope: Magnification Limits",
+                    date: "2023",
+                    category: "Research",
+                    tag: "Optics",
+                    description: "Explored how substrate wettability and surface energy define the optical power of liquid-drop lenses for portable microscopy.",
+                    reflection: "Mapping the boundary between surface tension and geometric optics showed me that high-precision results are achievable through fluid interface mechanics.",
+                    imageUrl: "https://images.unsplash.com/photo-1516339901600-2e1a62dc0c45?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 8,
+                    title: "Ruler Cannon: Elastic Energy Conversion",
+                    date: "2023",
+                    category: "Research",
+                    tag: "Structural Mechanics",
+                    description: "Developed a dynamic model for projectile ejection using Euler-Bernoulli beam theory for flexible cantilever systems.",
+                    reflection: "Quantifying elastic potential energy was my first deep dive into modeling complex vibration modes and transient energy states.",
+                    imageUrl: "https://images.unsplash.com/photo-1509228468518-180dd482180c?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 9,
+                    title: "Quantum Fingerprinting via Raman Spectra",
+                    date: "2024",
+                    category: "Research",
+                    tag: "Spectroscopy",
+                    description: "Applied Raman scattering techniques to identify molecular structures in organic polymers (PTFE/PVDF). Supervised by Prof. Xiaoshan Wu (NJU).",
+                    reflection: "Filtering Rayleigh reflections to see inelastic scattering taught me that every material has a 'signature' written in its vibrational modes.",
+                    imageUrl: "https://images.unsplash.com/photo-1453847668862-487637052f8a?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 10,
+                    title: "Geometric Origami: Fractal Topology",
+                    date: "2024",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "Engineering complex 3D fractal structures from a single sheet of paper using principles of non-Euclidean geometry.",
+                    reflection: "Origami is where math becomes tactile. It proves that immense complexity can emerge from a single, simple starting point.",
+                    imageUrl: "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?auto=format&fit=crop&w=800&q=80",
+                },
+                {
+                    id: 11,
+                    title: "Model UN: Global Energy Transition",
+                    date: "2023",
+                    category: "Diplomacy",
+                    tag: "Best Delegate",
+                    description: "Drafted resolutions to bridge energy policy gaps between developing nations and industrial powers at the International MUN.",
+                    reflection: "Diplomacy, like physics, is about finding equilibrium. I learned to negotiate for the stable center where collective progress becomes possible.",
+                    imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+                }
+            ];
+
+            const filteredItems = useMemo(() => {
+                return activeCategory === 'All' 
+                    ? items 
+                    : items.filter(item => item.category === activeCategory);
+            }, [activeCategory]);
+
+            return (
+                <div className="min-h-screen bg-stone-50 text-stone-800 selection:bg-stone-200">
+                    <header className="max-w-6xl mx-auto pt-24 pb-16 px-6">
+                        <div className="flex items-center gap-2 text-stone-400 mb-6 uppercase tracking-[0.2em] text-[10px] font-bold">
+                            <Icon name="graduation-cap" size={14} />
+                            <span>Undergraduate Admissions Portfolio 2025</span>
+                        </div>
+                        <h1 className="text-6xl md:text-7xl font-serif font-light mb-6 text-stone-900 tracking-tight leading-tight">
+                            Zixuan's <span className="italic underline decoration-stone-200 underline-offset-8 text-stone-700">Archive</span>
+                        </h1>
+                        <p className="text-xl text-stone-500 max-w-2xl font-light leading-relaxed">
+                            Synthesizing physical rigor with humanistic inquiry. This digital collection 
+                            documents a journey through laboratories, rural villages, and the shared table.
+                        </p>
+                    </header>
+
+                    <nav className="max-w-6xl mx-auto px-6 mb-16 sticky top-0 z-20 bg-stone-50/90 backdrop-blur-xl py-6 border-b border-stone-100">
+                        <div className="flex flex-wrap gap-3">
+                            {categories.map((cat) => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setActiveCategory(cat.id)}
+                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all duration-500 ${
+                                        activeCategory === cat.id 
+                                        ? 'bg-stone-900 text-stone-50 shadow-xl shadow-stone-300' 
+                                        : 'bg-white text-stone-400 hover:text-stone-900 hover:bg-white border border-stone-200 shadow-sm'
+                                    }`}
+                                >
+                                    <Icon name={cat.icon} size={14} />
+                                    {cat.label}
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    <main className="max-w-6xl mx-auto px-6 pb-32">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            {filteredItems.map((item) => (
+                                <article key={item.id} className="group flex flex-col bg-white rounded-[2.5rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-700">
+                                    <div className="relative h-80 overflow-hidden">
+                                        <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                                        <div className="absolute top-6 left-6 flex gap-2">
+                                            <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-[9px] font-bold tracking-widest text-stone-800 flex items-center gap-2 uppercase shadow-sm">
+                                                <Icon name="calendar" size={12} />
+                                                {item.date}
+                                            </div>
+                                            {item.tag && (
+                                                <div className="bg-stone-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-[9px] font-bold tracking-widest text-white flex items-center gap-2 uppercase shadow-sm">
+                                                    <Icon name="star" size={12} className="text-white" />
+                                                    {item.tag}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="p-10 flex flex-col flex-grow">
+                                        <h3 className="text-3xl font-serif font-medium mb-6 text-stone-900 leading-tight">{item.title}</h3>
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 mb-2">Technical Context</h4>
+                                                <p className="text-stone-500 text-base leading-relaxed font-light">{item.description}</p>
+                                            </div>
+                                            <div className="bg-stone-50 rounded-3xl p-8 border-l-4 border-stone-900 relative">
+                                                <Icon name="quote" size={24} className="absolute top-4 right-4 text-stone-200 opacity-50" />
+                                                <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-800 mb-4">Personal Reflection</h4>
+                                                <p className="text-stone-800 text-base italic font-light leading-relaxed">"{item.reflection}"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    </main>
+
+                    <footer className="border-t border-stone-200 bg-white pt-24 pb-12 px-6">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-12 mb-16">
+                                <div className="text-center md:text-left">
+                                    <h2 className="text-3xl font-serif font-medium text-stone-900 mb-4 tracking-tight text-stone-700">Beyond the Laboratory</h2>
+                                    <p className="text-stone-400 text-sm max-w-sm italic">Exploring the intersection of physical laws and the human experience.</p>
+                                </div>
+                                <div className="flex gap-12 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">
+                                    <a href="#" className="hover:text-stone-900 transition-colors">Academic CV</a>
+                                    <a href="#" className="hover:text-stone-900 transition-colors">Research Gate</a>
+                                    <a href="#" className="hover:text-stone-900 transition-colors">Contact</a>
+                                </div>
+                            </div>
+                            <div className="pt-12 border-t border-stone-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] font-bold uppercase tracking-widest text-stone-300">
+                                <span>© 2025 Zixuan Peng • NFLS</span>
+                                <span className="italic text-stone-400">"Create the right conditions, then trust the seeds to take root."</span>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PortfolioApp />);
+    </script>
+</body>
+</html>
