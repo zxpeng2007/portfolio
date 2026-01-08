@@ -587,6 +587,17 @@
                     reflection: "This was my first hands-on lesson in \"setting the scene.\" I learned that a flourishing garden isn't just about the seeds you plant, but the patient labor of clearing the ground and nurturing the soil—an early sprout of my interest in ecosystem balance.",
                     imageUrl: "/portfolio/images/careday01.jpg",
                 },
+                {
+                    id: 54,
+                    title: "Care Day",
+                    date: "Mar 2017",
+                    category: "Service",
+                    tag: "Community Garden Volunteer",
+                    description: "Volunteered at the community garden in Santa Cruz, focusing on soil preparation, removing invasive weeds, and planting seasonal vegetables and flowers to revitalize local green spaces.",
+                    reflection: "This was my first hands-on lesson in \"setting the scene.\" I learned that a flourishing garden isn't just about the seeds you plant, but the patient labor of clearing the ground and nurturing the soil—an early sprout of my interest in ecosystem balance.",
+                    videoUrl: "/portfolio/images/robot001.mp4",
+                    imageUrl: "/portfolio/images/careday01.jpg",
+                }
             ];
 
             const filteredItems = useMemo(() => {
@@ -634,8 +645,22 @@
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             {filteredItems.map((item) => (
                                 <article key={item.id} className="group flex flex-col bg-white rounded-[2.5rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-700">
-                                    <div className="relative h-80 overflow-hidden">
-                                        <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                                    <div className="relative h-80 overflow-hidden bg-zinc-100">
+                                        {/* 媒体展示逻辑：如果有 videoUrl 则播放视频，否则显示图片 */}
+                                        {item.videoUrl ? (
+                                            <video 
+                                                src={item.videoUrl}
+                                                className="w-full h-full object-cover"
+                                                autoPlay
+                                                muted
+                                                loop
+                                                playsInline
+                                                poster={item.imageUrl} // 视频加载前显示的占位图
+                                            />
+                                        ) : (
+                                            <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                                        )}
+                                        
                                         <div className="absolute top-6 left-6 flex gap-2">
                                             <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-[9px] font-bold tracking-widest text-stone-800 flex items-center gap-2 uppercase shadow-sm">
                                                 <Icon name="calendar" size={12} />
@@ -643,7 +668,7 @@
                                             </div>
                                             {item.tag && (
                                                 <div className="bg-stone-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-[9px] font-bold tracking-widest text-white flex items-center gap-2 uppercase shadow-sm">
-                                                    <Icon name="star" size={12} className="text-white" />
+                                                    {item.videoUrl ? <Icon name="play" size={12} className="fill-white" /> : <Icon name="star" size={12} className="text-white" />}
                                                     {item.tag}
                                                 </div>
                                             )}
