@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive | Steven Peng — Undergraduate Admissions 2026</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23011F5B'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Georgia,serif' fill='%23fff' text-anchor='middle'%3ESP%3C/text%3E%3C/svg%3E">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX Parsing -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K9DJXMTLCS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-K9DJXMTLCS');
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect } = React;
+        
+        // Lucide Icon Component Wrapper
+        const Icon = ({ name, size = 18, className = "" }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
+        };
+
+        const PortfolioApp = () => {
+            const [activeCategory, setActiveCategory] = useState('All');
+
+            const categories = [
+                { id: 'All', label: 'All', icon: 'hash' },
+                { id: 'Research', label: 'Research & STEM', icon: 'book' },
+                { id: 'Service', label: 'Service & Exploration', icon: 'heart' },
+                { id: 'Creativity', label: 'Origami & Arts', icon: 'scissors' },
+                { id: 'Diplomacy', label: 'Strategy & Diplomacy', icon: 'globe' },
+            ];
+
+            const items = [
+ 		        {
+                    id: 1,
+                    title: "Gold medal, International Young Physicists' Tournament 2025",
+                    date: "Jul 2025",
+                    category: "Research",
+                    tag: "IYPT Gold Medal",
+                    description: "Captain of Team China. Gold Medal, Global 2nd place. All-time best score in China's IYPT history. Coached by Prof. Yongnan Li, Leaded by Prof. Zongqiang Chen and Prof. Jing Chen. Led the national team in 'Physics Fights,' defending complex models through rigorous intellectual dialogue.",
+                    reflection: "Physics is a dialogue, not a monologue. Success came not from a 'perfect' model, but from the humility to find truth where the equations blurred.",
+                    imageUrl: "/portfolio/images/iypt-gold001.jpg",
+                },
+ 		        {
+                    id: 2,
+                    title: "Gold medal, S.-T. Yau High School Science Award 2024",
+                    date: "Dec 2024",
+                    category: "Research",
+                    tag: "Global Gold Medal",
+                    description: "Team captain. Gold Medal (Physics). Coached by Prof. Dong Zhang from Nanjing University. Developed an AI-driven acoustic counting method. Professor Shing-Tung Yau of Tsinghua University and Professor Hirosi Ooguri of Caltech presented us with the awards.",
+                    reflection: "Research is the bridge between lab precision and reality. I learned that truth often hides in the anomalies that textbooks can’t predict.",
+                    imageUrl: "/portfolio/images/yau001.jpg",
+                },
+                {
+                    id: 3,
+                    title: "2024 Science Talent Program (Yingcai Program)",
+                    date: "Dec 2023-2024",
+                    category: "Research",
+                    tag: "Science Talent Program",
+                    description: "Selected as one of the few finalists from a pool of 541 candidates at my school following a rigorous multi-round selection process. Pursued this research for over a year, visiting Professor Zhang’s laboratory at least once a week.",
+                    reflection: "National Oral Defense(1/80 finalists). This long-term commitment allowed me to bridge the gap between complex physics simulations and real-world industrial applications.",
+                    imageUrl: "/portfolio/images/yingcai001.jpg",
+                },
+                {
+                    id: 4,
+                    title: "Acoustic Feature Analysis & Machine Learning",
+                    date: "Dec 2023-2024",
+                    category: "Research",
+                    tag: "Global Gold Medal",
+                    description: "Developed a non-invasive counting method for objects in sealed containers using CNNs and MFCC feature extraction. Supervised by Prof. Dong Zhang (NJU).",
+                    reflection: "Published in the Cambridge Journal for Junior Scientists(https://doi.org/10.4310/CJJS.250424060514). Granted CN patent(ZL202411544286.X).",
+                    imageUrl: "/portfolio/images/ballcounting.png",
+                },
+                {
+                    id: 5,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2023-2025",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "Designed 35 hands-on physics modules for children in Shuangbai. Transformed cafeteria trays into ripple tanks for experiential learning.",
+                    reflection: "I realized that the children didn't need me to impose formulas. My role was to provide the 'soil'—the environment—for their natural curiosity to bloom.",
+                    videoUrl: "/portfolio/images/yunnan001.mp4",
+                    imageUrl: "/portfolio/images/yunnan001.jpg",
+                },
+                {
+                    id: 6,
+                    title: "Robotics Lab Intern (Physics & AI)",
+                    date: "Jul 2025",
+                    category: "Research",
+                    tag: "Horizon Robotics Inc.",
+                    description: "Engineered 0.6m 3D-printed humanoid. Integrated HoloMotion & Physics-based AI for navigation & motor control. Optimized for autonomous locomotion.",
+                    reflection: "Complexity blooming from basic rewards reminded me that elegance often hides in minimal conditions.",
+                    videoUrl: "/portfolio/images/robot001.mp4",
+                    imageUrl: "/portfolio/images/intern001.jpg",
+                },
+                {
+                    id: 7,
+                    title: "Quantum Entanglement & Bell's Inequality",
+                    date: "Dec 2024 - Sep 2025",
+                    category: "Research",
+                    tag: "Quantum Physics",
+                    description: "Constructed a bulk-optics setup to produce entangled photon pairs via Type-II SPDC. Verified quantum non-locality by measuring a Bell parameter (S) of 2.4871.",
+                    reflection: "Supervised by Prof. Xiaosong Ma, this project turned abstract mathematical paradoxes into visceral physical reality. It provided a rigorous foundation in coincidence counting.",
+                    imageUrl: "/portfolio/images/bellinequality.png",
+                },
+                {
+                    id: 8,
+                    title: "Steven’s Kitchen: Culinary Alchemy",
+                    date: "Ongoing",
+                    category: "Service",
+                    tag: "Community",
+                    description: "Operating a home-based kitchen project exploring the thermodynamics of flavor. Balancing the 18 pleats of a Xiaolongbao and the precision of heat transfer.",
+                    reflection: "Cooking is the most intimate form of applied physics. It taught me how to host and build community, turning the rigid laws of thermodynamics into a language of warmth.",
+                    imageUrl: "/portfolio/images/kitchen16.png",
+                },
+                {
+                    id: 9,
+                    title: "2023 MUNUC-SFLS UNSC",
+                    date: "Dec 2023",
+                    category: "Diplomacy",
+                    tag: "Hornorable Mention",
+                    description: "Hornorable Mention, Russian Federation, UNSC.",
+                    reflection: "Diplomacy, like physics, is about finding equilibrium. I learned to negotiate for the stable center where collective progress becomes possible.",
+                    imageUrl: "/portfolio/images/mun002.jpg",
+                },
+                {
+                    id: 10,
+                    title: "Apple Tree Science Festival: Hands-On Physics, Jinling Primary School",
+                    date: "Jun 2025",
+                    category: "Service",
+                    tag: "Jinling Primary School",
+                    description: "Alumnus Lead of \"Apple Tree Science Festival.\" Designed physics labs & custom gear (periscopes) for 300+ pupils..",
+                    reflection: "Watching my students engage with the laws of heat transfer reminded me that scientific wonder is a shared inheritance that thrives best in a well-cultivated environment.",
+                    imageUrl: "/portfolio/images/jinxiao001.png",
+                },
+                {
+                    id: 11,
+                    title: "Acoustic Flame Suppression Mechanisms",
+                    date: "2024-2025",
+                    category: "Research",
+                    tag: "Fluid Dynamics",
+                    description: "Investigated vortex-induced oxygen contraction via sound waves. Utilized Schlieren imaging to map frequency-power relationships.",
+                    reflection: "Discovering that 'blowing out' a fire is actually a vortex-induced starvation process taught me to look beneath surface flow patterns for fundamental dynamics.",
+                    imageUrl: "/portfolio/images/soundvsflame.png",
+                },
+                
+                {
+                    id: 12,
+                    title: "Atmospheric Pressure & the Ruler Trick",
+                    date: "2023-2024",
+                    category: "Research",
+                    tag: "Classical Mechanics",
+                    description: "Analyzed cantilevered ruler stability during collisions. Quantified transient low-pressure zones using Tracker motion analysis.",
+                    reflection: "Proved that torque balance is governed by a 1.79 N·m atmospheric force. It reinforced the power of invisible variables in seemingly simple systems.",
+                    imageUrl: "/portfolio/images/rulertrick.png",
+                },
+                {
+                    id: 13,
+                    title: "Droplet Microscope: Magnification Limits",
+                    date: "2023-2024",
+                    category: "Research",
+                    tag: "Optics",
+                    description: "Explored how substrate wettability and surface energy define the optical power of liquid-drop lenses for portable microscopy.",
+                    reflection: "Mapping the boundary between surface tension and geometric optics showed me that high-precision results are achievable through fluid interface mechanics.",
+                    imageUrl: "/portfolio/images/dropletscope.png",
+                },
+                {
+                    id: 14,
+                    title: "Ruler Cannon: Elastic Energy Conversion",
+                    date: "2024-2025",
+                    category: "Research",
+                    tag: "Structural Mechanics",
+                    description: "Developed a dynamic model for projectile ejection using Euler-Bernoulli beam theory for flexible cantilever systems.",
+                    reflection: "Quantifying elastic potential energy was my first deep dive into modeling complex vibration modes and transient energy states.",
+                    imageUrl: "/portfolio/images/rulercannon.png",
+                },
+               {
+                    id: 15,
+                    title: "Quantu5m Fingerprinting via Raman Spectra",
+                    date: "2024-202",
+                    category: "Research",
+                    tag: "Spectroscopy",
+                    description: "Applied Raman scattering techniques to identify molecular structures in organic polymers (PTFE/PVDF). Supervised by Prof. Xiaoshan Wu (NJU).",
+                    reflection: "Filtering Rayleigh reflections to see inelastic scattering taught me that every material has a 'signature' written in its vibrational modes.",
+                    imageUrl: "/portfolio/images/quantumfingerprint.png",
+                },
+                {
+                    id: 16,
+                    title: "Geometric Origami: Fractal Topology",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "Co-founded Origami Club of NFLS. Grew to 50+ members. Led 20 workshops for 100+ peers. Raised 20k CNY for charity. Authored three original intricate origami designs.",
+                    reflection: "Origami is where math becomes tactile. It proves that immense complexity can emerge from a single, simple starting point.",
+                    imageUrl: "/portfolio/images/origami001.jpg",
+                },
+                {
+                    id: 17,
+                    title: "IYPT training camp with teammate Niu",
+                    date: "Jun 2025",
+                    category: "Research",
+                    tag: "IYPT Gold Medal",
+                    description: "We participated in the IYPT 2025 training camp together at Nankai University. There were 28 students in the training camp, all from all over the country, selected through the CYPT program.",
+                    reflection: "As the captain of the national team, I sometimes need to act as a \"translator\" to help reach a consensus.",
+                    imageUrl: "/portfolio/images/iypt001.jpg",
+                },
+                {
+                    id: 18,
+                    title: "2024 MUNUC-SFLS UNSC",
+                    date: "Dec 2024",
+                    category: "Diplomacy",
+                    tag: "Verbal Commendation",
+                    description: "Verbal Commendation, UNSC.",
+                    reflection: "Diplomacy, like physics, is about finding equilibrium. I learned to negotiate for the stable center where collective progress becomes possible.",
+                    imageUrl: "/portfolio/images/mun004.jpg",
+                },
+                {
+                    id: 19,
+                    title: "2024 Model United Nations of UChicago(MUNUC)",
+                    date: "Feb 2024",
+                    category: "Diplomacy",
+                    tag: "Participation",
+                    description: "MUNUC is a four-day academic conference. It's a pleasure to exchange ideas with MUN enthusiasts from all over the world.",
+                    reflection: "Diplomacy is the physics of human interests. I learned that progress isn't about finding a 'correct' formula, but about reaching a stable equilibrium where divergent variables can coexist.",
+                    imageUrl: "/portfolio/images/mun005.jpg",
+                },
+                {
+                    id: 20,
+                    title: "NIMUNC 2023-2025: Global Energy Transition",
+                    date: "Jul 2023-2025",
+                    category: "Diplomacy",
+                    tag: "Best Delegate",
+                    description: "Best delegate. Drafted resolutions to bridge energy policy gaps between developing nations and industrial powers at the International MUN.",
+                    reflection: "A resolution, like my garden, cannot be forced. My role shifted from a debater to a scene-setter, focusing on cultivating the shared ground where collective growth becomes possible.",
+                    imageUrl: "/portfolio/images/mun003.jpg",
+                },
+                {
+                    id: 21,
+                    title: "Model United Nations of Nanjing Foreign Language School",
+                    date: "2021-2025",
+                    category: "Diplomacy",
+                    tag: "President, dais",
+                    description: "Selected as 1 of 8 from 600+. Attended 5+ int'l conferences (e.g.,MUNUC), debating & drafting position papers. Train novices & lead weekly meetings.",
+                    reflection: "Member (G8-G9), President(G10-G11), & Coach (G12) of School MUN",
+                    imageUrl: "/portfolio/images/mun001.jpg",
+                },
+                {
+                    id: 22,
+                    title: "Steven’s Kitchen: Culinary Alchemy",
+                    date: "Ongoing",
+                    category: "Service",
+                    tag: "Community",
+                    description: "The best part isn't the plating; it’s the hosting. 'Steven’s Kitchen' is a community hub where my classmates exchange ideas over a bowl of rib and radish soup.",
+                    reflection: "Cooking is the most intimate form of applied physics. It taught me how to host and build community, turning the rigid laws of thermodynamics into a language of warmth.",
+                    imageUrl: "/portfolio/images/kitchen15.png",
+                },
+                {
+                    id: 23,
+                    title: "Farm to Table Activity of School",
+                    date: "Ongoing",
+                    category: "Service",
+                    tag: "Community",
+                    description: "A great dish starts in the soil—whether harvesting peppers from my own garden or cooking during my school’s farm-to-table activities.",
+                    reflection: "Physics is about understanding systems; cooking is about participating in them.",
+                    imageUrl: "/portfolio/images/kitchen14.png",
+                },
+                {
+                    id: 24,
+                    title: "9-year-old Steven, Santa Cruz, CA",
+                    date: "Mar 2017",
+                    category: "Service",
+                    tag: "Community",
+                    description: "As a nine-year-old at Wilder Ranch in Santa Cruz, I first discovered that heat was the most exciting variable in any equation.",
+                    reflection: "Today, that laboratory has moved to 'Steven’s Kitchen.",
+                    imageUrl: "/portfolio/images/kitchen01.png",
+                },
+                {
+                    id: 25,
+                    title: "Steven's Kitchen, not easy to fry a fish",
+                    date: "Ongoing",
+                    category: "Service",
+                    tag: "Community",
+                    description: "Mom taught me the \"hot pan, cold oil\" method to create a non-stick surface without any fancy coatings when frying the fish.",
+                    reflection: "I learned that patience was a physical variable because the protein needed time to set before it could be flipped. I was learning to respect a form of wisdom that my data could never capture.",
+                    imageUrl: "/portfolio/images/kitchen6.png",
+                }, 
+                {
+                    id: 26,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2023-2025",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "Organized a watercolor session in Shuangbai, where students painted their world with vibrant, imaginative palettes that exceeded all expectations.",
+                    reflection: "Watching them paint showed me that potential is a boundless variable. Every creative brushstroke was a reminder that imagination can transcend circumstances.",
+                    imageUrl: "/portfolio/images/yunnan008.jpg",
+                }, 
+                {
+                    id: 27,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2023-2025",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "At the end of the program, I was overwhelmed by dozens of handwritten notes and thank-you slips from the students in rural Yunnan.",
+                    reflection: "These slips carry more weight than gold medals. They are evidence that the most enduring impact isn't the physics I taught, but the shared trust we built.",
+                    imageUrl: "/portfolio/images/yunnan009.jpg",
+                }, 
+                {
+                    id: 28,
+                    title: "Steven's Kitchen, learning to make Jiaozi",
+                    date: "Ongoing",
+                    category: "Service",
+                    tag: "Community",
+                    description: "I love the precision of Chinese cuisine, but I’ve learned that not everything can be modeled. ",
+                    reflection: "Choosing the right flour or kneading dough to the perfect elasticity requires a 'hand-feel' that no physics formula can capture. It is a delicate balance mastered only through years of tactile intuition.",
+                    imageUrl: "/portfolio/images/kitchen8.png",
+                },
+                {
+                    id: 29,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2023-2025",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "Spent weeks mapping the sociological data of left-behind children, only to find their curiosity far more vibrant than any statistic could predict.",
+                    reflection: "Shuangbai taught me that individuals aren't variables to be solved, but resilient seeds that thrive as soon as you provide the right soil.",
+                    imageUrl: "/portfolio/images/yunnan001.jpg",
+                },
+                {
+                    id: 30,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2023-2025",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "Guided students through electromagnetism experiments using simple copper coils and magnets to visualize invisible field lines.",
+                    reflection: "I learned that when you provide the right tools, students don't need to be told how the world works—they can feel the pull of the laws of nature for themselves.",
+                    imageUrl: "/portfolio/images/yunnan002.jpg",
+                },
+                {
+                    id: 31,
+                    title: "HMMT 2025 Feburary",
+                    date: "Feb 2025",
+                    category: "Research",
+                    tag: "Math competition",
+                    description: "As captain, I formed the StoneCity team to participate in the HMMT 2025 February Tournament. Our team achieved 26th place in Team round.",
+                    reflection: "There are always mountains beyond mountains; we still need to work hard and learn more from others.",
+                    imageUrl: "/portfolio/images/mit001.jpg",
+                },
+                {
+                    id: 32,
+                    title: "STEM Pedagogy in Rural Yunnan",
+                    date: "July 2023-2025",
+                    category: "Service",
+                    tag: "Social Impact",
+                    description: "Guided students in constructing homopolar motors using simple batteries, copper wire, and magnets to demonstrate the Lorentz force.",
+                    reflection: "Watching the wire suddenly spin brought the invisible pulse of physics to life. It proved that true wonder often comes through tactile discovery rather than abstract chalkboard theory.",
+                    imageUrl: "/portfolio/images/yunnan004.jpg",
+                }, 
+                {
+                    id: 33,
+                    title: "Apple Tree Science Festival: Hands-On Physics",
+                    date: "Sep 2024-2025",
+                    category: "Service",
+                    tag: "Jinling Primary School",
+                    description: "Alumnus Lead of \"Apple Tree Science Festival.\". Talking with the Principal and teachers of my alma mater.",
+                    reflection: "Like those four tireless little balls, chasing an orderly trajectory in chaos, that is the most touching romance of science.",
+                    imageUrl: "/portfolio/images/jinxiao002.jpg",
+                },
+                {
+                    id: 34,
+                    title: "Apple Tree Science Festival: Hands-On Physics",
+                    date: "Sep 2024-2025",
+                    category: "Service",
+                    tag: "Jinling Primary School",
+                    description: "Led the alumni team during the Apple Tree Science Festival at my alma mater, where I developed a specialized thermodynamics curriculum and mentored elementary students in conducting hands-on thermal physics experiments.",
+                    reflection: "Translating the complexities of thermodynamics into a language accessible to young minds was a masterclass in conceptual clarity. It reinforced my belief that true mastery of a physical principle is proven when you can ignite a child’s inquisitiveness without relying on a single formal equation.",
+                    imageUrl: "/portfolio/images/jinxiao003.png",
+                },
+                {
+                    id: 35,
+                    title: "Geometric Origami: Fractal Topology",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "I fold origami at 2 AM when sleep won't come. My latest creation uses 300+ folds with hyperbolic paraboloid tessellations for scales. ",
+                    reflection: "Each fold follows mathematical rules: Kawasaki's theorem, Maekawa's theorem, circle packing for efficiency. Yet the joy isn't in the math; it's in feeling paper yield to pressure, watching chaos become order through repetition.",
+                    imageUrl: "/portfolio/images/origami002.png",
+                },
+                {
+                    id: 36,
+                    title: "Geometric Origami: Fractal Topology",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "Sometimes I fold blindfolded; the constrained creativity soothes me, infinite possibilities within a single uncut square.",
+                    reflection: "When stuck on physics problems, I fold cranes automatically; often the solution emerges around fold 200, the repetitive motion unlocking mental barriers.",
+                    imageUrl: "/portfolio/images/origami003.png",
+                },
+                {
+                    id: 37,
+                    title: "Origami Club of NFLS",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "Instructional activities of the Origami club.",
+                    reflection: "Origami teaches that sometimes understanding comes through fingers, not formulas.",
+                    imageUrl: "/portfolio/images/origami004.jpg",
+                },
+                {
+                    id: 38,
+                    title: "Geometric Origami",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "Instructional activities of the Origami club.",
+                    reflection: "Like emergence in physics, complex beauty arises from simple rules. But unlike physics, I control every fold, creating small, perfect worlds where I alone determine the outcome.",
+                    imageUrl: "/portfolio/images/origami005.jpg",
+                },
+                {
+                    id: 39,
+                    title: "Origami Club of NFLS",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Spatial Arts",
+                    description: "Instructional activities of the Origami club.",
+                    reflection: "Origami is where math becomes tactile. It proves that immense complexity can emerge from a single, simple starting point.",
+                    imageUrl: "/portfolio/images/origami006.jpg",
+                },
+                {
+                    id: 40,
+                    title: "Chess Club, NFLS",
+                    date: "Ongoing since 2023",
+                    category: "Diplomacy",
+                    tag: "Chess Club",
+                    description: "Founder, President of Chess Club & International Tournament Director.Orchestrated inter-school tournaments across Nanjing, Shanghai, and US high schools.",
+                    reflection: "The chessboard taught me that every move changes the entire field. It's a lesson in global positional advantage and the importance of long-term planning",
+                    imageUrl: "/portfolio/images/chess001.jpg",
+                },
+                 {
+                    id: 41,
+                    title: "Chess Club, NFLS",
+                    date: "Ongoing since 2023",
+                    category: "Diplomacy",
+                    tag: "Chess Club",
+                    description: "Leading the school chess club in a high-stakes regional tournament, meticulously analyzing mid-game transitions and pawn structures.",
+                    reflection: "Chess taught me that every move recalibrates the entire field. Similar to a physical system, a single shift in position can change the \"potential energy\" of the board, requiring a balance between local tactics and global strategy.",
+                    imageUrl: "/portfolio/images/chess002.jpg",
+                },
+                 {
+                    id: 42,
+                    title: "Chess Club, NFLS",
+                    date: "Ongoing since 2023",
+                    category: "Diplomacy",
+                    tag: "Chess Club",
+                    description: "Engaging in a rapid \"Blitz\" session where time pressure forces a shift from cold calculation to ingrained pattern recognition.",
+                    reflection: "While physics often seeks a single deterministic answer, chess reveals the beauty of \"bounded rationality.\"",
+                    imageUrl: "/portfolio/images/chess003.jpg",
+                },
+                 {
+                    id: 43,
+                    title: "Chess Club, NFLS",
+                    date: "Ongoing since 2023",
+                    category: "Diplomacy",
+                    tag: "Chess Club",
+                    description: "Mentoring junior members on the logic of the \"King’s Indian Defense,\" breaking down complex opening theories into accessible strategic building blocks.",
+                    reflection: "Teaching chess is much like my STEM pedagogy in Yunnan; it’s about \"setting the scene\" for someone else's discovery. The most rewarding moment isn't winning a game, but witnessing a peer find the winning sequence through their own newly-honed intuition.",
+                    imageUrl: "/portfolio/images/chess004.jpg",
+                },
+                 {
+                    id: 44,
+                    title: "Chess Club, NFLS",
+                    date: "Ongoing since 2023",
+                    category: "Diplomacy",
+                    tag: "Chess Club",
+                    description: "Facing a critical endgame in the inter-school league finals, where maintaining mental clarity was as vital as the moves themselves.",
+                    reflection: "A chessboard is a microcosm of chaos and order. I’ve realized that resilience isn't just about refusing to lose; it’s about maintaining the structural integrity of your plan even when the \"variables\" on the board become overwhelmingly complex.",
+                    imageUrl: "/portfolio/images/chess005.jpg",
+                },
+                 {
+                    id: 45,
+                    title: "Chess Club, NFLS",
+                    date: "Ongoing since 2023",
+                    category: "Diplomacy",
+                    tag: "Chess Club",
+                    description: "Informal afternoon sessions in the student lounge, where chess served as a silent but profound dialogue between students of diverse academic interests.",
+                    reflection: "Beyond the 64 squares, chess is a universal language of logic. It creates a space where a physicist, an artist, and a historian can communicate through strategy, proving that the most stable connections are built on shared intellectual curiosity.",
+                    imageUrl: "/portfolio/images/chess006.jpg",
+                },
+                {
+                    id: 46,
+                    title: "Joyful moments of the school sports meet",
+                    date: "Ongoing",
+                    category: "Creativity",
+                    tag: "Photography",
+                    description: "Captured the decisive moment of a high-speed jump rope sequence during the annual sports meeting, utilizing a 1/2000s shutter speed to freeze the kinetic arc.",
+                    reflection: "Capturing this moment requires an intuition that transcends technical settings. Much like kneading dough, it is about developing a feel for the rhythm of the athlete, moving beyond formulas to capture the raw vitality of the movement.",
+                    imageUrl: "/portfolio/images/pg001.jpg",
+                },
+                {
+                    id: 47,
+                    title: "The red leaves of the ivy, at Tsinghua University",
+                    date: "Dec 2024",
+                    category: "Creativity",
+                    tag: "Photography",
+                    description: "In December, as autumn deepens, the ivy vines at Tsinghua University create a picturesque scene against the backdrop of red brick walls.",
+                    reflection: "When I was participating S.-T. Yau High School Science Award at Tsinghua University.",
+                    imageUrl: "/portfolio/images/pg002.jpg",
+                },
+                {
+                    id: 48,
+                    title: "Mandarin ducks playing in the lotus pond",
+                    date: "Dec 2024",
+                    category: "Creativity",
+                    tag: "Photography",
+                    description: "The lotus flowers in the pond had long since disappeared in December, but that didn't stop the mandarin ducks from playing happily in the water.",
+                    reflection: "Take a break from the intense competition and relax.",
+                    imageUrl: "/portfolio/images/pg003.jpg",
+                },
+                {
+                    id: 49,
+                    title: "Local guide of Team China in IYPT 2025",
+                    date: "Jul 2025",
+                    category: "Creativity",
+                    tag: "Photography",
+                    description: "Harry was our local guide and accompanied us throughout the entire IYPT competition process. He is an undergraduate student at KTH and the team leader for the Swedish IOI.",
+                    reflection: "Harry was very very friendly, and I learned a lot about local customs from him.",
+                    imageUrl: "/portfolio/images/pg004.jpg",
+                },
+                {
+                    id: 50,
+                    title: "Stonecity team in HMMT 2025 Feburary",
+                    date: "Feb 2025",
+                    category: "Service",
+                    tag: "Community",
+                    description: "When we gather together to enjoy a meal and discuss math and science, it reminds me of Steven's Kitchen. ",
+                    reflection: "I like having a place like Steven's Kitchen where everyone can gather together often.",
+                    imageUrl: "/portfolio/images/mit002.jpg",
+                },
+                {
+                    id: 51,
+                    title: "The starry sky outside the airplane window",
+                    date: "Feb 2025",
+                    category: "Creativity",
+                    tag: "Photography",
+                    description: "Looking out the airplane window, the sky was filled with twinkling stars. This photo was taken with an iPhone 16 Pro Max, with an exposure time of 1.1 seconds and an ISO of 12500.",
+                    reflection: "At the time, I had just finished participating in the HMMT February competition at MIT and was on my way back to China.",
+                    imageUrl: "/portfolio/images/pg005.jpg",
+                },
+                {
+                    id: 52,
+                    title: "An old man in a Beijing hutong",
+                    date: "Aug 2024",
+                    category: "Creativity",
+                    tag: "Photography",
+                    description: "In August, under the blazing sun, an elderly man in a hutong (alleyway) sought refuge from the heat by going shirtless.",
+                    reflection: "This photograph has a rich, oil painting feel to it.",
+                    imageUrl: "/portfolio/images/pg007.jpg",
+                },
+                {
+                    id: 53,
+                    title: "California Coastal Cleanup",
+                    date: "Sep 2017",
+                    category: "Service",
+                    tag: "Community Service",
+                    description: "Participated in the California Coastal Cleanup Day along the Santa Cruz coastline, removing plastic debris and non-biodegradable waste to protect marine habitats and restore the shoreline.",
+                    reflection: "Walking the tide pools, I realized how human \"variables\" can disrupt natural equilibriums. It taught me that scientific stewardship requires a hands-on commitment to protecting the environments we study.",
+                    imageUrl: "/portfolio/images/coastalcleanup.jpg",
+                },
+                {
+                    id: 54,
+                    title: "Care Day",
+                    date: "Mar 2017",
+                    category: "Service",
+                    tag: "Community Garden Volunteer",
+                    description: "Volunteered at the community garden in Santa Cruz, focusing on soil preparation, removing invasive weeds, and planting seasonal vegetables and flowers to revitalize local green spaces.",
+                    reflection: "This was my first hands-on lesson in \"setting the scene.\" I learned that a flourishing garden isn't just about the seeds you plant, but the patient labor of clearing the ground and nurturing the soil—an early sprout of my interest in ecosystem balance.",
+                    imageUrl: "/portfolio/images/careday01.jpg",
+                }
+            ];
+
+            const filteredItems = useMemo(() => {
+                return activeCategory === 'All' 
+                    ? items 
+                    : items.filter(item => item.category === activeCategory);
+            }, [activeCategory]);
+
+            return (
+                <div className="min-h-screen bg-stone-50 text-stone-800 selection:bg-stone-200">
+                    <header className="max-w-6xl mx-auto pt-24 pb-16 px-6">
+                        <a href="./" className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-900 transition-colors mb-8 uppercase tracking-[0.2em] text-[10px] font-bold">
+                            <Icon name="arrow-left" size={14} />
+                            <span>Back to main site</span>
+                        </a>
+                        <div className="flex items-center gap-2 text-stone-400 mb-6 uppercase tracking-[0.2em] text-[10px] font-bold">
+                            <Icon name="graduation-cap" size={14} />
+                            <span>Undergraduate Admissions Portfolio 2026</span>
+                        </div>
+                        <h1 className="text-6xl md:text-7xl font-serif font-light mb-6 text-stone-900 tracking-tight leading-tight">
+                            Zixuan (Steven) Peng's <span className="italic underline decoration-stone-200 underline-offset-8 text-stone-700">Archive</span>
+                        </h1>
+                        <p className="text-xl text-stone-500 max-w-2xl font-light leading-relaxed">
+                            Synthesizing physical rigor with humanistic inquiry. This digital collection 
+                            documents a journey through laboratories, rural villages, and the shared table.
+                        </p>
+                    </header>
+
+                    <nav className="max-w-6xl mx-auto px-6 mb-16 sticky top-0 z-20 bg-stone-50/90 backdrop-blur-xl py-6 border-b border-stone-100">
+                        <div className="flex flex-wrap gap-3">
+                            {categories.map((cat) => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setActiveCategory(cat.id)}
+                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all duration-500 ${
+                                        activeCategory === cat.id 
+                                        ? 'bg-stone-900 text-stone-50 shadow-xl shadow-stone-300' 
+                                        : 'bg-white text-stone-400 hover:text-stone-900 hover:bg-white border border-stone-200 shadow-sm'
+                                    }`}
+                                >
+                                    <Icon name={cat.icon} size={14} />
+                                    {cat.label}
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    <main className="max-w-6xl mx-auto px-6 pb-32">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            {filteredItems.map((item) => (
+                                <article key={item.id} className="group flex flex-col bg-white rounded-[2.5rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-2xl transition-all duration-700">
+                                    <div className="relative h-80 overflow-hidden bg-zinc-100">
+                                        {/* 媒体展示逻辑：如果有 videoUrl 则播放视频，否则显示图片 */}
+                                        {item.videoUrl ? (
+                                            <video 
+                                                src={item.videoUrl}
+                                                className="w-full h-full object-cover"
+                                                autoPlay
+                                                muted
+                                                loop
+                                                playsInline
+                                                poster={item.imageUrl} // 视频加载前显示的占位图
+                                            />
+                                        ) : (
+                                            <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105" />
+                                        )}
+                                        
+                                        <div className="absolute top-6 left-6 flex gap-2">
+                                            <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-[9px] font-bold tracking-widest text-stone-800 flex items-center gap-2 uppercase shadow-sm">
+                                                <Icon name="calendar" size={12} />
+                                                {item.date}
+                                            </div>
+                                            {item.tag && (
+                                                <div className="bg-stone-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-[9px] font-bold tracking-widest text-white flex items-center gap-2 uppercase shadow-sm">
+                                                    {item.videoUrl ? <Icon name="play" size={12} className="fill-white" /> : <Icon name="star" size={12} className="text-white" />}
+                                                    {item.tag}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="p-10 flex flex-col flex-grow">
+                                        <h3 className="text-3xl font-serif font-medium mb-6 text-stone-900 leading-tight">{item.title}</h3>
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 mb-2">Related Context</h4>
+                                                <p className="text-stone-500 text-base leading-relaxed font-light">{item.description}</p>
+                                            </div>
+                                            <div className="bg-stone-50 rounded-3xl p-8 border-l-4 border-stone-900 relative">
+                                                <Icon name="quote" size={24} className="absolute top-4 right-4 text-stone-200 opacity-50" />
+                                                <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-800 mb-4">Personal Reflection</h4>
+                                                <p className="text-stone-800 text-base italic font-light leading-relaxed">"{item.reflection}"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    </main>
+
+                    <footer className="border-t border-stone-200 bg-white pt-24 pb-12 px-6">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-12 mb-16">
+                                <div className="text-center md:text-left">
+                                    <h2 className="text-3xl font-serif font-medium text-stone-900 mb-4 tracking-tight text-stone-700">Beyond the Laboratory</h2>
+                                    <p className="text-stone-400 text-sm max-w-sm italic">Exploring the intersection of physical laws and the human experience.</p>
+                                </div>
+                                <div className="flex gap-12 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">
+                                    <a href="#" className="hover:text-stone-900 transition-colors">Academic CV</a>
+                                    <a href="#" className="hover:text-stone-900 transition-colors">Research Gate</a>
+                                    <a href="#" className="hover:text-stone-900 transition-colors">Contact</a>
+                                </div>
+                            </div>
+                            <div className="pt-12 border-t border-stone-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] font-bold uppercase tracking-widest text-stone-300">
+                                <span>© 2025 Zixuan Peng • NFLS</span>
+                                <span className="italic text-stone-400">"Create the right conditions, then trust the seeds to take root."</span>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PortfolioApp />);
+    </script>
+</body>
+</html>
