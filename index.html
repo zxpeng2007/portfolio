@@ -131,6 +131,8 @@ html.glon #gl { opacity: 1; }
     color: var(--cue); animation: nod 2.4s ease-in-out infinite;
 }
 #cue svg { width: 44px; height: 28px; }
+#cue { transition: opacity .35s ease, visibility 0s linear 0s; }
+#cue.away { opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
 @keyframes nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
 /* ---------- corner key ---------- */
@@ -520,49 +522,127 @@ html.dragging, html.dragging * { cursor: move !important; user-select: none; }
         document.getElementById('grain').style.backgroundImage = 'url(' + c.toDataURL() + ')';
     })();
 
-    /* ---------- the scene: an atom over a simulation mesh, a robot watching a ball ---------- */
+    /* ---------- the scene: a small 3D world the camera flies through as the page scrolls ----------
+       Scroll progress (0 at the top of the page, 1 at the bottom) is followed with time-based damping, so the camera glides
+       and feels the same at any frame rate. Progress picks a point on a Catmull-Rom path through five camera stops
+       (eye, target, field of view): looking up at the atom, rising past it, down to the robots' rally, across to the
+       meshed cantilever, and up to an overview. Drawn small and scaled up, so it stays in pixels. */
     var scene = (function () {
         var cv = document.getElementById('gl');
         var g = cv.getContext && cv.getContext('2d');
-        if (!g) return null;
-        var TAU = Math.PI * 2;
+        if (!g || typeof Path2D === 'undefined') return null;
+        var TAU = Math.PI * 2, NEAR = .2;
         var PAL = {
             light: {
-                sky: ['#fbfdff', '#eef4fc', '#dbe8f8'], dust: '58,118,214',
-                halo: '#bde8f4', halo2: '#e4f7fc',
-                floor: ['#e2edfa', '#cfe0f5'], grid: '74,132,214', gridA: .42, horizon: '#b9d3f0',
+                sky: ['#fbfdff', '#eef4fc', '#dbe8f8'], dust: '58,118,214', halo: '#bde8f4', halo2: '#e4f7fc',
+                floor: ['#e2edfa', '#cfe0f5'], fog: '226,237,250', grid: '74,132,214', gridA: .5, horizon: '#b9d3f0',
                 orbit: '#4fb9c9', orbitBack: 'rgba(79,185,201,.42)', glow: 'rgba(127,217,228,.5)', glow0: 'rgba(127,217,228,0)',
                 e: '#1d5fd6', p: ['#1f3fb6', '#4b74e4', '#b4d0ff'], n: ['#3e93bb', '#7ccfe3', '#e4fbff'],
                 ball: '#ffffff', ballEdge: '#2f63c4', trail: '47,99,196',
-                bot: ['#2a49b0', '#5a83df', '#a9c7f7'], visor: '#0b3a4e', eye: '#7fe9ff', shadow: 'rgba(40,80,160,.2)'
+                bot: ['#2a49b0', '#5a83df', '#a9c7f7'], visor: '#0b3a4e', eye: '#7fe9ff', shadow: 'rgba(40,80,160,.18)',
+                table: '#2d4fbf', tableEdge: '#ffffff', leg: '#2a49b0', net: 'rgba(255,255,255,.5)',
+                wall: ['#c9dbf4', '#adc6ec', '#e4eefb'], wallLine: 'rgba(47,99,196,.35)', mesh: 'rgba(11,58,78,.42)', paddle: '#e0304e', red: '#e0304e',
+                tag: ['#dbf5e5', '#3a9d63', '#145c35']
             },
             dark: {
-                sky: ['#000000', '#01040c', '#071736'], dust: '255,255,255',
-                moon: '#eef3f9', moonShade: '#b9c8dc',
-                floor: ['#04102a', '#010409'], grid: '70,140,255', gridA: .55, horizon: '#16408a',
+                sky: ['#000000', '#01040c', '#071736'], dust: '255,255,255', moon: '#eef3f9', moonShade: '#b9c8dc',
+                floor: ['#04102a', '#010409'], fog: '4,16,42', grid: '70,140,255', gridA: .62, horizon: '#16408a',
                 orbit: '#7fd9e4', orbitBack: 'rgba(127,217,228,.32)', glow: 'rgba(63,108,240,.42)', glow0: 'rgba(63,108,240,0)',
                 e: '#d2f8ff', p: ['#1b3cc0', '#3f6cf0', '#a6c6ff'], n: ['#246f96', '#52b3d6', '#cdf4ff'],
                 ball: '#f4fbff', ballEdge: '#a6c6ff', trail: '150,195,255',
-                bot: ['#1f40b4', '#3d68ea', '#9dc0ff'], visor: '#000a1c', eye: '#7fe9ff', shadow: 'rgba(0,0,0,.55)'
+                bot: ['#1f40b4', '#3d68ea', '#9dc0ff'], visor: '#000a1c', eye: '#7fe9ff', shadow: 'rgba(0,0,0,.5)',
+                table: '#1c3aa8', tableEdge: '#dfeaff', leg: '#1f40b4', net: 'rgba(200,220,255,.38)',
+                wall: ['#17357c', '#0e2560', '#22489a'], wallLine: 'rgba(127,217,228,.3)', mesh: 'rgba(0,10,30,.5)', paddle: '#ff4d6a', red: '#ff4d6a',
+                tag: ['#0f3a24', '#3fbf73', '#c4f7d8']
             }
         };
+        /* stress colours for the beam: blue at the free tip, through aqua and white, to red at the clamped root */
+        var RAMP = [[0, [31, 63, 182]], [.45, [79, 159, 230]], [.7, [127, 217, 228]], [.88, [230, 251, 255]], [1, [224, 48, 78]]];
         var NUC = [[0,0,0,1],[1,0,0,0],[-1,0,0,1],[0,1,0,0],[0,-1,0,1],[0,0,1,0],[0,0,-1,1],
                    [.62,.62,.62,1],[-.62,-.62,.62,0],[.62,-.62,-.62,1],[-.62,.62,-.62,0],[-.62,.62,.62,0],[.62,-.62,.62,1]];
-        var W = 1, H = 1, S = 3, L, P, dark, dust = [], FA = 1;
-        var scrollY = window.scrollY || 0, vh = innerHeight, raf = 0, last = 0, t0 = performance.now(), shown = false;
 
+        /* the world, in metres, y up */
+        var ATOM = [9, 11, -24], RO = 4.6;
+        var TB = { x: -4, z: -10, y: .76, hl: 1.37, hw: .7625 };
+        var BA = [TB.x - TB.hl - .55, 0, TB.z], BB = [TB.x + TB.hl + .55, 0, TB.z];
+        var BM = { x: 11, y: 1.7, z: -5, L: 5, h: .5, w: .5 };
+        var SUN = nrm([1, .62, -1]);
+        var STOPS = [
+            [[-2.5, 1.6, 0], [4, 6, -24], 55],
+            [[-1.2, 3.3, -5.4], [-4, .8, -10], 52],
+            [[3, 7.5, -11], [9, 10.5, -24], 62],
+            [[15.5, 2.8, 2.5], [12.5, 1.3, -5], 50],
+            [[-9, 11, 10], [5.5, 2.5, -12], 56]
+        ];
+        var STOP0_TALL = [[-9.8, 1.7, -3.4], [3, 5.6, -18.6], 44];        /* tall screens: the atom stands straight above the rally */
+        var SUN_TALL = nrm([.65, .53, -.545]);
+
+        function sub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+        function add(a, b) { return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]; }
+        function mul(a, s) { return [a[0] * s, a[1] * s, a[2] * s]; }
+        function dot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+        function crs(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+        function nrm(a) { var l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; }
+        function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
+
+        var W = 1, H = 1, S = 3, P, dark, motes = [], stars = [];
+        var C = { e: [0, 0, 0], f: [0, 0, -1], r: [1, 0, 0], u: [0, 1, 0], fp: 1 };
+        var sy = window.scrollY || 0, maxScroll = 1, cur = 0, intro = 0, last = 0, drawn = -1e9, tAcc = 0, shown = false;
+
+        /* ---- camera ---- */
+        function cr(a, b, c, d, t) { return .5 * (2 * b + (c - a) * t + (2 * a - 5 * b + 4 * c - d) * t * t + (3 * b - a - 3 * c + d) * t * t * t); }
+        function camAt(u) {
+            var st = STOPS.slice(); if (W < H) st[0] = STOP0_TALL;
+            var N = st.length - 1, x = Math.min(u, .9999) * N, i = Math.floor(x), t = x - i;
+            function at(k) { return st[clamp(k, 0, N)]; }
+            var a = at(i - 1), b = at(i), c = at(i + 1), d = at(i + 2), out = [];
+            for (var j = 0; j < 2; j++) out.push([0, 1, 2].map(function (k) { return cr(a[j][k], b[j][k], c[j][k], d[j][k], t); }));
+            out.push(cr(a[2], b[2], c[2], d[2], t));
+            return out;
+        }
+        function setCam(e, tg, fov) {
+            var f = nrm(sub(tg, e)), r = nrm(crs(f, [0, 1, 0]));
+            C.e = e; C.f = f; C.r = r; C.u = crs(r, f); C.fp = (H / 2) / Math.tan(fov * Math.PI / 360);
+        }
+        function cam(p) { var d = sub(p, C.e); return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
+        function camDir(d) { return [dot(d, C.r), dot(d, C.u), dot(d, C.f)]; }
+        function scr(c) { return [W / 2 + c[0] * C.fp / c[2], H / 2 - c[1] * C.fp / c[2]]; }
+        function clipz(a, b) { var t = (NEAR - a[2]) / (b[2] - a[2]); return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, NEAR]; }
+        function seg(path, a, b) {                                   /* a camera-space segment, cut at the near plane */
+            if (a[2] < NEAR && b[2] < NEAR) return;
+            if (a[2] < NEAR) a = clipz(a, b); else if (b[2] < NEAR) b = clipz(b, a);
+            var p = scr(a), q = scr(b); path.moveTo(p[0], p[1]); path.lineTo(q[0], q[1]);
+        }
+        function poly(pts) {                                         /* world polygon to a path; false if it reaches behind the eye */
+            var out = [], i, c;
+            for (i = 0; i < pts.length; i++) { c = cam(pts[i]); if (c[2] < NEAR) return false; out.push(scr(c)); }
+            g.beginPath(); g.moveTo(out[0][0], out[0][1]);
+            for (i = 1; i < out.length; i++) g.lineTo(out[i][0], out[i][1]);
+            g.closePath();
+            return true;
+        }
+        function horizonY() {
+            var h = nrm([C.f[0], 0, C.f[2]]), hz = dot(h, C.f);
+            return hz > .02 ? H / 2 - dot(h, C.u) * C.fp / hz : -1e4;
+        }
+
+        /* ---- sizing, seeding ---- */
         function seed() {
-            var n = Math.round(W * H / (dark ? 560 : 950));
-            dust = [];
-            for (var i = 0; i < n; i++) {
-                var big = Math.random() < .12;
-                dust.push({
-                    x: Math.random() * W, y: Math.random() * H,
-                    r: big ? 1.1 + Math.random() * 1.2 : .45 + Math.random() * .6,
-                    ring: big && Math.random() < .6,
-                    ph: Math.random() * TAU, sp: .3 + Math.random() * .9,
-                    a: .25 + Math.random() * .55, d: .3 + Math.random() * .7
-                });
+            var i, n;
+            motes = [];
+            n = dark ? 120 : 230;
+            for (i = 0; i < n; i++) {
+                var big = Math.random() < .14;
+                motes.push({ p: [-16 + Math.random() * 42, .3 + Math.random() * 16, -40 + Math.random() * 54],
+                             r: big ? 1.6 : 1, ring: big && !dark && Math.random() < .65,
+                             ph: Math.random() * TAU, sp: .3 + Math.random() * .9, a: .3 + Math.random() * .55 });
+            }
+            stars = [];
+            if (dark) for (i = 0; i < 360; i++) {
+                var az = Math.random() * TAU, el = Math.asin(Math.random() * 1.02 - .02);
+                stars.push({ d: [Math.cos(el) * Math.cos(az), Math.sin(el), Math.cos(el) * Math.sin(az)],
+                             r: Math.random() < .1 ? 1.5 + Math.random() : .5 + Math.random() * .6,
+                             ph: Math.random() * TAU, sp: .4 + Math.random(), a: .35 + Math.random() * .6 });
             }
         }
         function size() {
@@ -571,236 +651,372 @@ html.dragging, html.dragging * { cursor: move !important; user-select: none; }
             W = Math.max(1, Math.round(r.width / S));
             H = Math.max(1, Math.round(r.height / S));
             cv.width = W; cv.height = H;
-            vh = innerHeight;
-            var portrait = W < H;
-            var hy = Math.round(H * .78);
-            L = {
-                hy: hy, F: H - hy, vx: W * (portrait ? .5 : .44),
-                atom: portrait ? { x: W * .6, y: H * .45, R: Math.min(W * .33, H * .18) }
-                               : { x: W * .7, y: H * .43, R: Math.min(H * .23, W * .16) },
-                halo: portrait ? { x: W * .82, y: H * .17, r: W * .09 }
-                               : { x: W * .88, y: H * .19, r: Math.min(W * .045, H * .08) },
-                botZ: 1.3, botF: portrait ? -.5 : -.62, ballZ: 1.9
-            };
-            seed();
+            measure();
         }
-        function proj(X, Z, h) { return [L.vx + X * L.F / Z, L.hy + (1 - (h || 0)) * L.F / Z]; }
-        function span(Z) { return Math.max(L.vx, W - L.vx) / L.F * Z + .25; }
-        function ballAt(s, sp) {
-            var X = -sp + (((s % (2 * sp)) + 2 * sp) % (2 * sp));
-            var k = (X + sp) / .95, f = k - Math.floor(k);
-            return { X: X, h: .55 * 4 * f * (1 - f) };
+        function measure() { maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight); }
+
+        /* ---- sky, sun or moon, stars ---- */
+        function drawSky(hy, t) {
+            if (hy > 0) {
+                var sk = g.createLinearGradient(0, hy - H, 0, hy);
+                sk.addColorStop(0, P.sky[0]); sk.addColorStop(.6, P.sky[1]); sk.addColorStop(1, P.sky[2]);
+                g.fillStyle = sk; g.fillRect(0, 0, W, Math.min(H, hy) + 1);
+            }
+            var i, c, p;
+            if (dark) {
+                g.fillStyle = 'rgb(' + P.dust + ')';
+                for (i = 0; i < stars.length; i++) {
+                    var s = stars[i]; c = camDir(s.d);
+                    if (c[2] < .05) continue;
+                    p = scr(c);
+                    if (p[0] < -2 || p[0] > W + 2 || p[1] < -2 || p[1] > hy) continue;
+                    var a = s.a * (.55 + .45 * Math.sin(t * 1.7 * s.sp + s.ph));
+                    g.globalAlpha = a; g.beginPath(); g.arc(p[0], p[1], s.r, 0, TAU); g.fill();
+                    if (s.r > 1.5) { g.globalAlpha = a * .45; g.fillRect(p[0] - s.r * 2.4, p[1] - .4, s.r * 4.8, .8); g.fillRect(p[0] - .4, p[1] - s.r * 2.4, .8, s.r * 4.8); }
+                }
+                g.globalAlpha = 1;
+            }
+            c = camDir(W < H ? SUN_TALL : SUN);
+            if (c[2] > .05) {
+                p = scr(c); var R = .06 * C.fp;
+                if (!dark) {
+                    g.strokeStyle = P.halo; g.lineWidth = R * .34;
+                    g.beginPath(); g.ellipse(p[0], p[1], R, R * .8, -.15, 0, TAU); g.stroke();
+                    g.strokeStyle = P.halo2; g.lineWidth = Math.max(1, R * .08);
+                    g.beginPath(); g.ellipse(p[0], p[1], R * .93, R * .73, -.15, 0, TAU); g.stroke();
+                } else {
+                    var gl = g.createRadialGradient(p[0], p[1], R * .8, p[0], p[1], R * 2.6);
+                    gl.addColorStop(0, 'rgba(190,220,255,.16)'); gl.addColorStop(1, 'rgba(190,220,255,0)');
+                    g.fillStyle = gl; g.fillRect(p[0] - R * 3, p[1] - R * 3, R * 6, R * 6);
+                    var gr = g.createRadialGradient(p[0] - R * .35, p[1] - R * .35, R * .1, p[0], p[1], R * 1.1);
+                    gr.addColorStop(0, '#ffffff'); gr.addColorStop(.65, P.moon); gr.addColorStop(1, P.moonShade);
+                    g.fillStyle = gr; g.beginPath(); g.ellipse(p[0], p[1], R * 1.05, R * .86, -.15, 0, TAU); g.fill();
+                    g.fillStyle = 'rgba(120,145,185,.22)';
+                    [[.32, -.18, .2], [-.28, .16, .13], [.12, .38, .1], [-.05, -.42, .08]].forEach(function (k) {
+                        g.beginPath(); g.arc(p[0] + k[0] * R, p[1] + k[1] * R, k[2] * R, 0, TAU); g.fill();
+                    });
+                }
+            }
         }
 
-        function drawDust(t, par) {
-            var c = 'rgb(' + P.dust + ')';
-            g.fillStyle = c; g.strokeStyle = c; g.lineWidth = .8;
-            for (var i = 0; i < dust.length; i++) {
-                var d = dust[i];
-                var x = d.x + Math.sin(t * .07 * d.sp + d.ph) * 4 * d.d;
-                var y = d.y - (dark ? 0 : t * 1.1 * d.sp) - par * .25 * d.d;
-                y = ((y % H) + H) % H;
-                var a = d.a * (dark ? .55 + .45 * Math.sin(t * 1.7 * d.sp + d.ph) : .75 + .25 * Math.sin(t * .9 * d.sp + d.ph));
-                g.globalAlpha = a;
-                if (d.ring && !dark) {
-                    g.beginPath(); g.arc(x, y, d.r * 1.9, 0, TAU); g.stroke();
-                    g.fillRect(x - .5, y - .5, 1, 1);
-                } else {
-                    g.beginPath(); g.arc(x, y, d.r, 0, TAU); g.fill();
-                    if (dark && d.r > 1.5) {
-                        g.globalAlpha = a * .45;
-                        g.fillRect(x - d.r * 2.4, y - .4, d.r * 4.8, .8);
-                        g.fillRect(x - .4, y - d.r * 2.4, .8, d.r * 4.8);
+        /* ---- the ground: a triangulated mesh that follows the eye, fading into the floor with distance ---- */
+        function groundY(h, D) { var c = cam([C.e[0] + h[0] * D, 0, C.e[2] + h[2] * D]); return c[2] > NEAR ? scr(c)[1] : H * 2; }
+        function drawGround(hy) {
+            var top = Math.max(0, hy);
+            var fg = g.createLinearGradient(0, top, 0, H);
+            fg.addColorStop(0, P.floor[0]); fg.addColorStop(1, P.floor[1]);
+            g.fillStyle = fg; g.fillRect(0, top, W, H - top + 1);
+            var R = 90, cx = Math.round(C.e[0]), cz = Math.round(C.e[2]);
+            var x0 = cx - R, x1 = cx + R, z0 = cz - R, z1 = cz + R, path = new Path2D(), x, z, c;
+            for (x = x0; x <= x1; x++) seg(path, cam([x, 0, z0]), cam([x, 0, z1]));
+            for (z = z0; z <= z1; z++) seg(path, cam([x0, 0, z]), cam([x1, 0, z]));
+            for (c = x0 - z1; c <= x1 - z0; c++) {                                     /* diagonals x - z = c */
+                var za = Math.max(z0, x0 - c), zb = Math.min(z1, x1 - c);
+                if (za < zb) seg(path, cam([c + za, 0, za]), cam([c + zb, 0, zb]));
+            }
+            g.lineWidth = 1; g.strokeStyle = 'rgba(' + P.grid + ',' + P.gridA + ')'; g.stroke(path);
+            var h = nrm([C.f[0], 0, C.f[2]]), yNear = Math.min(H, groundY(h, 8)), yFar = groundY(h, 46);
+            if (yNear > top) {
+                var fog = g.createLinearGradient(0, Math.min(yFar, yNear - 1), 0, yNear);
+                fog.addColorStop(0, 'rgba(' + P.fog + ',1)'); fog.addColorStop(1, 'rgba(' + P.fog + ',0)');
+                g.fillStyle = fog; g.fillRect(0, top, W, yNear - top);
+            }
+            if (hy > 0 && hy < H) { g.fillStyle = P.horizon; g.fillRect(0, Math.round(hy), W, 1); }
+        }
+
+        /* ---- the atom: three orbits, a nucleus, electrons with short trails ---- */
+        function drawAtom(t) {
+            var A = [ATOM[0], ATOM[1] + Math.sin(t * .6) * .25, ATOM[2]], ca = cam(A);
+            if (ca[2] < 1) return;
+            var s = scr(ca), pu = C.fp / ca[2];
+            var glw = g.createRadialGradient(s[0], s[1], 0, s[0], s[1], RO * .7 * pu);
+            glw.addColorStop(0, P.glow); glw.addColorStop(1, P.glow0);
+            g.fillStyle = glw; g.fillRect(s[0] - RO * pu, s[1] - RO * pu, 2 * RO * pu, 2 * RO * pu);
+            var orbs = [0, 1, 2].map(function (i) {
+                var ph = .5 + t * .05 + i * TAU / 3, tl = 1.12;
+                var n = [Math.sin(tl) * Math.cos(ph), Math.cos(tl), Math.sin(tl) * Math.sin(ph)];
+                var a = nrm(crs(n, [0, 1, 0]));
+                return { a: a, b: crs(n, a), sp: .9 + .22 * i, ph: i * 2.3 };
+            });
+            function at(o, th) {
+                var c = Math.cos(th) * RO, sn = Math.sin(th) * RO;
+                return [A[0] + o.a[0] * c + o.b[0] * sn, A[1] + o.a[1] * c + o.b[1] * sn, A[2] + o.a[2] * c + o.b[2] * sn];
+            }
+            function electrons(front) {
+                orbs.forEach(function (o) {
+                    var th = t * o.sp + o.ph;
+                    if ((cam(at(o, th))[2] <= ca[2]) !== front) return;
+                    g.fillStyle = P.e;
+                    for (var k = 6; k >= 0; k--) {
+                        var c = cam(at(o, th - k * .07));
+                        if (c[2] < NEAR) continue;
+                        var p = scr(c), r = Math.max(.8, (k ? .09 : .17) * C.fp / c[2]);
+                        g.globalAlpha = k ? .5 - k * .065 : 1;
+                        g.beginPath(); g.arc(p[0], p[1], r, 0, TAU); g.fill();
                     }
+                    g.globalAlpha = 1;
+                });
+            }
+            var back = new Path2D(), front = new Path2D(), K = 96;
+            orbs.forEach(function (o) {
+                var prev = cam(at(o, 0));
+                for (var k = 1; k <= K; k++) {
+                    var c = cam(at(o, k / K * TAU));
+                    seg((prev[2] + c[2]) / 2 > ca[2] ? back : front, prev, c);
+                    prev = c;
                 }
+            });
+            g.lineWidth = Math.max(1, .075 * pu);
+            g.strokeStyle = P.orbitBack; g.stroke(back);
+            electrons(false);
+            var rn = .62, ay = t * .4, cy = Math.cos(ay), sy2 = Math.sin(ay);
+            NUC.map(function (q) {
+                var x = q[0] * cy + q[2] * sy2, z = -q[0] * sy2 + q[2] * cy;
+                return [cam([A[0] + x * rn * .95, A[1] + q[1] * rn * .95, A[2] + z * rn * .95]), q[3]];
+            }).filter(function (q) { return q[0][2] > NEAR; })
+              .sort(function (a, b) { return b[0][2] - a[0][2]; })
+              .forEach(function (q) {
+                var p = scr(q[0]), rr = rn * C.fp / q[0][2], col = q[1] ? P.p : P.n;
+                var gr = g.createRadialGradient(p[0] - rr * .35, p[1] - rr * .4, rr * .1, p[0], p[1], rr);
+                gr.addColorStop(0, col[2]); gr.addColorStop(.45, col[1]); gr.addColorStop(1, col[0]);
+                g.fillStyle = gr; g.beginPath(); g.arc(p[0], p[1], rr, 0, TAU); g.fill();
+            });
+            g.lineWidth = Math.max(1, .075 * pu);
+            g.strokeStyle = P.orbit; g.stroke(front);
+            electrons(true);
+        }
+
+        /* ---- the rally: a table, two humanoids, a ball and its tracked trajectory ---- */
+        function ballAt(t) {
+            var T = .95, n = Math.floor(t / T), s = t / T - n, fwd = n % 2 === 0;
+            var xa = BA[0] + .5, xb = BB[0] - .5, x0 = fwd ? xa : xb, x1 = fwd ? xb : xa;
+            var z0 = TB.z + ((n % 3 + 3) % 3 - 1) * .28, z1 = TB.z + (((n + 1) % 3 + 3) % 3 - 1) * .28;
+            var sb = .62, y, q;
+            if (s < sb) { q = s / sb; y = 1.02 + (.8 - 1.02) * q + .34 * 4 * q * (1 - q); }
+            else { q = (s - sb) / (1 - sb); y = .8 + (1.02 - .8) * q + .26 * 4 * q * (1 - q); }
+            return { p: [x0 + (x1 - x0) * s, y, z0 + (z1 - z0) * s], s: s, fwd: fwd };
+        }
+        function drawTable() {
+            var x0 = TB.x - TB.hl, x1 = TB.x + TB.hl, z0 = TB.z - TB.hw, z1 = TB.z + TB.hw, y = TB.y;
+            if (poly([[x0 - .1, 0, z0 - .1], [x1 + .1, 0, z0 - .1], [x1 + .1, 0, z1 + .1], [x0 - .1, 0, z1 + .1]])) { g.fillStyle = P.shadow; g.fill(); }
+            var mid = cam([TB.x, y, TB.z]);
+            var lp = new Path2D();
+            [[x0 + .25, z0 + .12], [x1 - .25, z0 + .12], [x1 - .25, z1 - .12], [x0 + .25, z1 - .12]].forEach(function (q) {
+                seg(lp, cam([q[0], 0, q[1]]), cam([q[0], y, q[1]]));
+            });
+            g.strokeStyle = P.leg; g.lineWidth = Math.max(1, .05 * C.fp / Math.max(1, mid[2])); g.stroke(lp);
+            g.lineWidth = 1;
+            if (poly([[x0, y, z0], [x1, y, z0], [x1, y, z1], [x0, y, z1]])) { g.fillStyle = P.table; g.fill(); g.strokeStyle = P.tableEdge; g.stroke(); }
+            var cl = new Path2D(); seg(cl, cam([x0, y, TB.z]), cam([x1, y, TB.z])); g.strokeStyle = P.tableEdge; g.stroke(cl);
+            if (poly([[TB.x, y, z0 - .15], [TB.x, y, z1 + .15], [TB.x, y + .15, z1 + .15], [TB.x, y + .15, z0 - .15]])) { g.fillStyle = P.net; g.fill(); g.strokeStyle = P.tableEdge; g.stroke(); }
+        }
+        function drawBall(t, bl) {
+            var i, c, p;
+            g.fillStyle = 'rgb(' + P.trail + ')';
+            for (i = 18; i >= 1; i--) {
+                c = cam(ballAt(t - i * .03).p);
+                if (c[2] < NEAR) continue;
+                p = scr(c); g.globalAlpha = (1 - i / 19) * .9;
+                g.fillRect(Math.round(p[0]), Math.round(p[1]), 1, 1);
+            }
+            g.globalAlpha = 1;
+            c = cam(bl.p); if (c[2] < NEAR) return;
+            p = scr(c);
+            var r = Math.max(1, .05 * C.fp / c[2]);
+            var over = Math.abs(bl.p[0] - TB.x) < TB.hl && Math.abs(bl.p[2] - TB.z) < TB.hw;
+            var sc = cam([bl.p[0], over ? TB.y + .003 : 0, bl.p[2]]);
+            if (sc[2] > NEAR) { var sp = scr(sc); g.fillStyle = P.shadow; g.beginPath(); g.ellipse(sp[0], sp[1], r * 1.2, r * .45, 0, 0, TAU); g.fill(); }
+            g.fillStyle = P.ball; g.strokeStyle = P.ballEdge; g.lineWidth = 1;
+            g.beginPath(); g.arc(p[0], p[1], r, 0, TAU); g.fill(); g.stroke();
+        }
+        function drawRobot(pos, fx, sw, t, bsx) {
+            var c = cam(pos); if (c[2] < NEAR) return;
+            var b = scr(c), k = 1.32 * C.fp / c[2], bx = b[0], by = b[1];
+            var tc = cam([pos[0] + fx, pos[1], pos[2]]);
+            var m = tc[2] > NEAR ? (scr(tc)[0] >= bx ? 1 : -1) : fx;              /* face the table on screen */
+            var col = P.bot;
+            function R(x0, y0, x1, y1, cl) { var a = bx + m * x0 * k, e = bx + m * x1 * k; g.fillStyle = cl; g.fillRect(Math.min(a, e), by - y1 * k, Math.abs(e - a), (y1 - y0) * k); }
+            function L(pts, w, cl) {
+                g.strokeStyle = cl; g.lineWidth = Math.max(1, w * k); g.beginPath();
+                pts.forEach(function (q, i) { var X = bx + m * q[0] * k, Y = by - q[1] * k; if (i) g.lineTo(X, Y); else g.moveTo(X, Y); });
+                g.stroke();
+            }
+            g.lineCap = 'round'; g.lineJoin = 'round';
+            g.fillStyle = P.shadow; g.beginPath();
+            g.ellipse(bx, by, .32 * k, .32 * k * clamp(-C.f[1] + .2, .18, .6), 0, 0, TAU); g.fill();
+            R(-.13, 0, -.03, .38, col[1]); R(.03, 0, .13, .38, col[1]);
+            R(-.13, 0, -.105, .38, col[0]); R(.03, 0, .055, .38, col[0]);
+            R(-.12, .19, -.04, .22, col[2]); R(.04, .19, .12, .22, col[2]);
+            R(-.17, 0, -.02, .05, col[0]); R(.02, 0, .17, .05, col[0]);
+            R(-.15, .36, .15, .45, col[0]);
+            L([[-.21, .69], [-.26, .54], [-.23, .41]], .075, col[0]);                    /* far arm */
+            R(-.18, .44, .18, .73, col[1]); R(-.18, .44, -.15, .73, col[0]); R(-.15, .7, .18, .73, col[2]);
+            R(-.09, .53, .09, .65, col[2]); R(-.03, .57, .03, .61, Math.sin(t * 2.2) > 0 ? P.eye : col[0]);
+            var hx = .27 + .17 * sw, hy = .46 + .1 * sw;                                  /* paddle arm, swinging through the hit */
+            L([[.21, .69], [.29, .56], [hx, hy]], .075, col[0]);
+            var px = hx + .06 + .05 * sw, py = hy + .07;
+            L([[hx, hy], [px, py]], .03, col[0]);
+            g.fillStyle = P.paddle; g.beginPath();
+            g.ellipse(bx + m * (px + .02) * k, by - (py + .05) * k, Math.max(.8, .065 * k), Math.max(.8, .08 * k), 0, 0, TAU); g.fill();
+            R(-.25, .63, -.17, .74, col[1]); R(.17, .63, .25, .74, col[1]);
+            R(-.04, .72, .04, .78, col[0]);
+            R(-.13, .77, .13, .99, col[1]); R(-.13, .77, -.11, .99, col[0]); R(-.11, .97, .13, .99, col[2]);
+            R(-.11, .83, .11, .93, P.visor);
+            if ((t % 4.3) > .14) { var ex = m * clamp((bsx - bx) / (k * 1.5), -1, 1) * .06; R(ex - .035, .86, ex + .035, .9, P.eye); }
+            R(-.008, .99, .008, 1.07, col[0]);
+            g.fillStyle = Math.sin(t * 3) > 0 ? P.eye : col[2];
+            g.beginPath(); g.arc(bx, by - 1.09 * k, Math.max(.6, .024 * k), 0, TAU); g.fill();
+        }
+        function drawRally(t) {
+            var bl = ballAt(t), tc = cam([TB.x, TB.y, TB.z]), bc = cam(bl.p), bsx = bc[2] > NEAR ? scr(bc)[0] : W / 2;
+            var hit = clamp((bl.s - .8) / .2, 0, 1), follow = clamp(1 - bl.s / .14, 0, 1);
+            var bots = [[BA, 1, bl.fwd ? follow : hit], [BB, -1, bl.fwd ? hit : follow]].map(function (r) { return { r: r, z: cam(r[0])[2] }; });
+            bots.forEach(function (o) { if (o.z > tc[2]) drawRobot(o.r[0], o.r[1], o.r[2], t, bsx); });
+            drawTable();
+            drawBall(t, bl);
+            bots.forEach(function (o) { if (o.z <= tc[2]) drawRobot(o.r[0], o.r[1], o.r[2], t, bsx); });
+        }
+
+        /* ---- the cantilever: a meshed beam under a tip load, coloured by bending stress ---- */
+        function ramp(s) {
+            for (var i = 1; i < RAMP.length; i++) if (s <= RAMP[i][0]) {
+                var a = RAMP[i - 1], b = RAMP[i], q = (s - a[0]) / (b[0] - a[0]);
+                return 'rgb(' + [0, 1, 2].map(function (k) { return Math.round(a[1][k] + (b[1][k] - a[1][k]) * q); }).join(',') + ')';
+            }
+            return 'rgb(' + RAMP[RAMP.length - 1][1].join(',') + ')';
+        }
+        function drawBeam(t) {
+            var B = BM, d = .45 + .1 * Math.sin(t * 1.1), N = 12, h2 = B.h / 2, w2 = B.w / 2, faces = [];
+            function dy(x) { var q = (x - B.x) / B.L; return -d * q * q * (3 - q) / 2; }
+            function face(pts, n, s) {
+                var c = [0, 0, 0]; pts.forEach(function (p) { c = add(c, p); }); c = mul(c, 1 / pts.length);
+                if (dot(n, sub(C.e, c)) <= 0) return;
+                faces.push({ p: pts, z: cam(c)[2], s: s });
+            }
+            var X0 = B.x - .6, X1 = B.x, Y1 = 2.6, Z0 = B.z - 1, Z1 = B.z + 1;
+            face([[X0, 0, Z1], [X1, 0, Z1], [X1, Y1, Z1], [X0, Y1, Z1]], [0, 0, 1], -1);
+            face([[X1, 0, Z0], [X0, 0, Z0], [X0, Y1, Z0], [X1, Y1, Z0]], [0, 0, -1], -1);
+            face([[X1, 0, Z1], [X1, 0, Z0], [X1, Y1, Z0], [X1, Y1, Z1]], [1, 0, 0], -2);
+            face([[X0, 0, Z0], [X0, 0, Z1], [X0, Y1, Z1], [X0, Y1, Z0]], [-1, 0, 0], -2);
+            face([[X0, Y1, Z0], [X0, Y1, Z1], [X1, Y1, Z1], [X1, Y1, Z0]], [0, 1, 0], -3);
+            for (var i = 0; i < N; i++) {
+                var xa = B.x + B.L * i / N, xb = B.x + B.L * (i + 1) / N, ya = B.y + dy(xa), yb = B.y + dy(xb), s = 1 - (i + .5) / N;
+                var zA = B.z - w2, zB = B.z + w2;
+                face([[xa, ya + h2, zA], [xb, yb + h2, zA], [xb, yb + h2, zB], [xa, ya + h2, zB]], [0, 1, 0], s);
+                face([[xa, ya - h2, zB], [xb, yb - h2, zB], [xb, yb - h2, zA], [xa, ya - h2, zA]], [0, -1, 0], s);
+                face([[xa, ya - h2, zB], [xb, yb - h2, zB], [xb, yb + h2, zB], [xa, ya + h2, zB]], [0, 0, 1], s * .9);
+                face([[xb, yb - h2, zA], [xa, ya - h2, zA], [xa, ya + h2, zA], [xb, yb + h2, zA]], [0, 0, -1], s * .9);
+                if (i === N - 1) face([[xb, yb - h2, zA], [xb, yb - h2, zB], [xb, yb + h2, zB], [xb, yb + h2, zA]], [1, 0, 0], .04);
+            }
+            if (poly([[X0 - .2, 0, Z0 - .2], [X1 + B.L, 0, B.z - .6], [X1 + B.L, 0, B.z + .6], [X0 - .2, 0, Z1 + .2]])) { g.fillStyle = P.shadow; g.fill(); }
+            faces.sort(function (a, b) { return b.z - a.z; });
+            g.lineWidth = 1; g.strokeStyle = P.mesh;
+            faces.forEach(function (f) {
+                if (!poly(f.p)) return;
+                g.fillStyle = f.s < 0 ? P.wall[-f.s - 1] : ramp(f.s); g.fill();
+                g.strokeStyle = f.s < 0 ? P.wallLine : P.mesh; g.stroke();
+            });
+            var tipY = B.y + dy(B.x + B.L) + h2, tx = B.x + B.L;                     /* the load at the tip */
+            var a0 = cam([tx, tipY + 1.1, B.z]), a1 = cam([tx, tipY + .08, B.z]);
+            if (a0[2] > NEAR && a1[2] > NEAR) {
+                var p0 = scr(a0), p1 = scr(a1), hw = Math.max(1.5, .14 * C.fp / a1[2]);
+                g.strokeStyle = P.red; g.fillStyle = P.red; g.lineWidth = Math.max(1, .05 * C.fp / a1[2]);
+                g.beginPath(); g.moveTo(p0[0], p0[1]); g.lineTo(p1[0], p1[1] - hw); g.stroke();
+                g.beginPath(); g.moveTo(p1[0], p1[1]); g.lineTo(p1[0] - hw * .7, p1[1] - hw * 1.3); g.lineTo(p1[0] + hw * .7, p1[1] - hw * 1.3); g.closePath(); g.fill();
+            }
+            var tg = cam([B.x + B.L * .45, B.y + 1.25, B.z]);                          /* the verdict, issued by code */
+            if (tg[2] > NEAR && tg[2] < 30) {
+                var q = scr(tg), fs = 8;
+                g.font = fs + 'px "DotGothic16", monospace';
+                var tw = Math.ceil(g.measureText('VERIFIED').width), bw = tw + 8, bh = fs + 5, bx0 = Math.round(q[0] - bw / 2), by0 = Math.round(q[1] - bh / 2);
+                g.fillStyle = P.tag[0]; g.fillRect(bx0, by0, bw, bh);
+                g.strokeStyle = P.tag[1]; g.lineWidth = 1; g.strokeRect(bx0 + .5, by0 + .5, bw - 1, bh - 1);
+                g.fillStyle = P.tag[2]; g.textBaseline = 'middle'; g.fillText('VERIFIED', bx0 + 4, by0 + bh / 2 + .5);
+            }
+        }
+
+        /* ---- motes in the air, near and far ---- */
+        function drawMotes(t) {
+            var col = 'rgb(' + P.dust + ')';
+            g.fillStyle = col; g.strokeStyle = col; g.lineWidth = .8;
+            for (var i = 0; i < motes.length; i++) {
+                var m = motes[i];
+                var c = cam([m.p[0] + Math.sin(t * .11 * m.sp + m.ph) * .6, m.p[1] + Math.sin(t * .17 * m.sp + m.ph * 2) * .4, m.p[2]]);
+                if (c[2] < NEAR || c[2] > 60) continue;
+                var p = scr(c);
+                if (p[0] < -4 || p[0] > W + 4 || p[1] < -4 || p[1] > H + 4) continue;
+                var r = clamp(.05 * m.r * C.fp / c[2], .45, 2.8);
+                g.globalAlpha = m.a * clamp(1.15 - c[2] / 55, 0, 1) * (dark ? .5 + .4 * Math.sin(t * 1.3 * m.sp + m.ph) : .8 + .2 * Math.sin(t * .9 * m.sp + m.ph));
+                if (m.ring) { g.beginPath(); g.arc(p[0], p[1], r * 1.9, 0, TAU); g.stroke(); g.fillRect(p[0] - .5, p[1] - .5, 1, 1); }
+                else { g.beginPath(); g.arc(p[0], p[1], r, 0, TAU); g.fill(); }
             }
             g.globalAlpha = 1;
         }
-        function drawHalo() {
-            var h = L.halo;
-            g.globalAlpha = FA;
-            if (!dark) {
-                g.strokeStyle = P.halo; g.lineWidth = h.r * .34;
-                g.beginPath(); g.ellipse(h.x, h.y, h.r, h.r * .8, -.15, 0, TAU); g.stroke();
-                g.strokeStyle = P.halo2; g.lineWidth = Math.max(1, h.r * .08);
-                g.beginPath(); g.ellipse(h.x, h.y, h.r * .93, h.r * .73, -.15, 0, TAU); g.stroke();
-            } else {
-                var gl = g.createRadialGradient(h.x, h.y, h.r * .8, h.x, h.y, h.r * 2.6);
-                gl.addColorStop(0, 'rgba(190,220,255,.16)'); gl.addColorStop(1, 'rgba(190,220,255,0)');
-                g.fillStyle = gl; g.fillRect(h.x - h.r * 3, h.y - h.r * 3, h.r * 6, h.r * 6);
-                var gr = g.createRadialGradient(h.x - h.r * .35, h.y - h.r * .35, h.r * .1, h.x, h.y, h.r * 1.1);
-                gr.addColorStop(0, '#ffffff'); gr.addColorStop(.65, P.moon); gr.addColorStop(1, P.moonShade);
-                g.fillStyle = gr;
-                g.beginPath(); g.ellipse(h.x, h.y, h.r * 1.05, h.r * .86, -.15, 0, TAU); g.fill();
-                g.fillStyle = 'rgba(120,145,185,.22)';
-                [[.32, -.18, .2], [-.28, .16, .13], [.12, .38, .1], [-.05, -.42, .08]].forEach(function (c) {
-                    g.beginPath(); g.arc(h.x + c[0] * h.r, h.y + c[1] * h.r, c[2] * h.r, 0, TAU); g.fill();
-                });
-            }
-        }
-        function drawFloor(t) {
-            var hy = L.hy, F = L.F;
-            g.globalAlpha = FA;
-            var fg = g.createLinearGradient(0, hy, 0, H);
-            fg.addColorStop(0, P.floor[0]); fg.addColorStop(1, P.floor[1]);
-            g.fillStyle = fg; g.fillRect(0, hy, W, H - hy + 2);
-            g.save();
-            g.beginPath(); g.rect(0, hy, W, H - hy + 2); g.clip();
-            var cell = .5, zn = .8, zf = 26, off = (t * .12) % cell, xl = span(zn) * 3;
-            g.strokeStyle = 'rgba(' + P.grid + ',' + P.gridA + ')'; g.lineWidth = 1;
-            g.beginPath();
-            var a, b, X, Z, n;
-            for (X = -Math.ceil(xl / cell) * cell; X <= xl; X += cell) {           // depth lines
-                a = proj(X, zn); b = proj(X, zf); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]);
-            }
-            for (Z = cell - off; Z < zf; Z += cell) {                                 // cross lines
-                if (Z < zn * .6) continue;
-                var y = hy + F / Z; g.moveTo(0, y); g.lineTo(W, y);
-            }
-            for (n = -Math.ceil((xl + zf) / cell); n * cell <= xl; n++) {            // diagonals: a triangulated mesh
-                a = proj(n * cell + zn + off, zn); b = proj(n * cell + zf + off, zf);
-                g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]);
-            }
-            g.stroke();
-            var fade = g.createLinearGradient(0, hy, 0, hy + (H - hy) * .5);
-            fade.addColorStop(0, P.floor[0]); fade.addColorStop(1, dark ? 'rgba(4,16,42,0)' : 'rgba(226,237,250,0)');
-            g.fillStyle = fade; g.fillRect(0, hy, W, (H - hy) * .5);
-            g.restore();
-            g.fillStyle = P.horizon; g.fillRect(0, hy, W, 1);
-        }
-        function drawBall(t) {
-            var Z = L.ballZ, sp = span(Z), s = t * 1.5 + sp * .55, cur = ballAt(s, sp);
-            var r = .06 * L.F / Z, i, q, pt;
-            g.fillStyle = 'rgb(' + P.trail + ')';
-            for (i = 34; i >= 1; i--) {                                               // the tracked trajectory
-                q = ballAt(s - i * .09, sp);
-                if (q.X > cur.X) continue;
-                pt = proj(q.X, Z, q.h);
-                g.globalAlpha = FA * (1 - i / 35) * .9;
-                g.fillRect(Math.round(pt[0]), Math.round(pt[1] - r), 1, 1);
-            }
-            var gp = proj(cur.X, Z, 0);
-            g.globalAlpha = FA * (1 - cur.h * 1.4);
-            g.fillStyle = P.shadow;
-            g.beginPath(); g.ellipse(gp[0], gp[1], r * 1.3 * (1 - cur.h * .6), r * .4, 0, 0, TAU); g.fill();
-            pt = proj(cur.X, Z, cur.h);
-            g.globalAlpha = FA;
-            g.fillStyle = P.ball; g.strokeStyle = P.ballEdge; g.lineWidth = 1;
-            g.beginPath(); g.arc(pt[0], pt[1] - r, r, 0, TAU); g.fill(); g.stroke();
-            return cur.X;
-        }
-        function drawBot(t, ballX) {
-            var Z = L.botZ, X = L.botF * (L.vx / L.F) * Z;
-            var base = proj(X, Z, 0), k = .95 * L.F / Z, bx = base[0], by = base[1];
-            var look = Math.max(-1, Math.min(1, (ballX - X) / 1.6));
-            var c = P.bot;
-            function R(x0, y0, x1, y1, col) { g.fillStyle = col; g.fillRect(bx + x0 * k, by - y1 * k, (x1 - x0) * k, (y1 - y0) * k); }
-            g.globalAlpha = FA;
-            g.fillStyle = P.shadow; g.beginPath(); g.ellipse(bx, by, .3 * k, .05 * k, 0, 0, TAU); g.fill();
-            R(-.13, 0, -.03, .38, c[1]); R(.03, 0, .13, .38, c[1]);                   // legs
-            R(-.13, 0, -.105, .38, c[0]); R(.03, 0, .055, .38, c[0]);
-            R(-.12, .19, -.04, .22, c[2]); R(.04, .19, .12, .22, c[2]);               // knees
-            R(-.17, 0, -.02, .05, c[0]); R(.02, 0, .17, .05, c[0]);                   // feet
-            R(-.15, .36, .15, .45, c[0]);                                              // pelvis
-            var sw = Math.sin(t * 1.6) * .03;
-            g.strokeStyle = c[0]; g.lineWidth = .075 * k; g.lineCap = 'round'; g.lineJoin = 'round';
-            g.beginPath(); g.moveTo(bx - .21 * k, by - .69 * k); g.lineTo(bx - .26 * k, by - .54 * k); g.lineTo(bx - .23 * k, by - (.4 + sw) * k); g.stroke();
-            g.beginPath(); g.moveTo(bx + .21 * k, by - .69 * k); g.lineTo(bx + .26 * k, by - .54 * k); g.lineTo(bx + .24 * k, by - (.41 - sw) * k); g.stroke();
-            R(-.18, .44, .18, .73, c[1]); R(-.18, .44, -.15, .73, c[0]); R(-.15, .7, .18, .73, c[2]);   // torso
-            R(-.09, .53, .09, .65, c[2]); R(-.03, .57, .03, .61, (Math.sin(t * 2.2) > 0) ? P.eye : c[0]);
-            R(-.25, .63, -.17, .74, c[1]); R(.17, .63, .25, .74, c[1]);              // shoulders
-            R(-.04, .72, .04, .78, c[0]);                                              // neck
-            R(-.13, .77, .13, .99, c[1]); R(-.13, .77, -.11, .99, c[0]); R(-.11, .97, .13, .99, c[2]);  // head
-            R(-.11, .83, .11, .93, P.visor);                                           // visor
-            if ((t % 4.3) > .14) { var ex = look * .06; R(ex - .035, .86, ex + .035, .9, P.eye); }
-            R(-.008, .99, .008, 1.07, c[0]);                                           // antenna
-            g.fillStyle = Math.sin(t * 3) > 0 ? P.eye : c[2];
-            g.beginPath(); g.arc(bx, by - 1.09 * k, .024 * k, 0, TAU); g.fill();
-        }
-        function drawAtom(t) {
-            var A = L.atom, R = A.R, r = R * .3, x = A.x, y = A.y + Math.sin(t * .6) * R * .03, base = .5 + t * .05;
-            g.globalAlpha = FA;
-            var gl = g.createRadialGradient(x, y, 0, x, y, R * .6);
-            gl.addColorStop(0, P.glow); gl.addColorStop(1, P.glow0);
-            g.fillStyle = gl; g.fillRect(x - R, y - R, 2 * R, 2 * R);
-            var orb = [0, 1, 2].map(function (i) { return { a: base + i * TAU / 3, sp: .9 + .22 * i, ph: i * 2.3 }; });
-            var lw = Math.max(1, R * .018), er = Math.max(1.4, R * .028);
-            function electrons(front) {
-                orb.forEach(function (o) {
-                    var th = t * o.sp + o.ph;
-                    if ((Math.sin(th) > 0) !== front) return;
-                    g.fillStyle = P.e;
-                    for (var k = 6; k >= 0; k--) {
-                        var tk = th - k * .07, ca = Math.cos(tk), sa = Math.sin(tk);
-                        var ex = x + R * ca * Math.cos(o.a) - r * sa * Math.sin(o.a);
-                        var ey = y + R * ca * Math.sin(o.a) + r * sa * Math.cos(o.a);
-                        g.globalAlpha = FA * (k ? .5 - k * .065 : 1);
-                        g.beginPath(); g.arc(ex, ey, k ? er * .55 : er, 0, TAU); g.fill();
-                    }
-                });
-                g.globalAlpha = FA;
-            }
-            g.lineWidth = lw; g.strokeStyle = P.orbitBack;
-            orb.forEach(function (o) { g.beginPath(); g.ellipse(x, y, R, r, o.a, Math.PI, TAU); g.stroke(); });
-            electrons(false);
-            var rn = R * .115, ay = t * .4, ax = .5, cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
-            NUC.map(function (p) {
-                var X = p[0] * cy + p[2] * sy, Z = -p[0] * sy + p[2] * cy;
-                return [X, p[1] * cx - Z * sx, p[1] * sx + Z * cx, p[3]];
-            }).sort(function (a, b) { return a[2] - b[2]; }).forEach(function (p) {
-                var px = x + p[0] * rn * .95, py = y + p[1] * rn * .95, rr = rn * (1 + p[2] * .08), col = p[3] ? P.p : P.n;
-                var gr = g.createRadialGradient(px - rr * .35, py - rr * .4, rr * .1, px, py, rr);
-                gr.addColorStop(0, col[2]); gr.addColorStop(.45, col[1]); gr.addColorStop(1, col[0]);
-                g.fillStyle = gr; g.beginPath(); g.arc(px, py, rr, 0, TAU); g.fill();
-            });
-            g.lineWidth = lw; g.strokeStyle = P.orbit;
-            orb.forEach(function (o) { g.beginPath(); g.ellipse(x, y, R, r, o.a, 0, Math.PI); g.stroke(); });
-            electrons(true);
-        }
+
+        /* ---- a frame ---- */
+        function smoother(x) { return x * x * x * (x * (x * 6 - 15) + 10); }
         function draw(t) {
-            var par = Math.min(scrollY, vh * 1.5) / S;
-            FA = Math.max(0, 1 - scrollY / (vh * .95));
-            var sky = g.createLinearGradient(0, 0, 0, H);
-            sky.addColorStop(0, P.sky[0]); sky.addColorStop(.6, P.sky[1]); sky.addColorStop(1, P.sky[2]);
-            g.globalAlpha = 1; g.fillStyle = sky; g.fillRect(0, 0, W, H);
-            drawDust(t, par);
-            if (FA > 0) {
-                g.save(); g.translate(0, -par * .55);
-                drawHalo(); drawFloor(t);
-                var bx = drawBall(t);
-                drawBot(t, bx); drawAtom(t);
-                g.restore();
-                g.globalAlpha = 1;
-            }
+            var cm = camAt(cur), lift = intro < 1 ? 12 * (1 - smoother(intro)) : 0;
+            var fov = cm[2]; if (W < H) fov = Math.min(82, fov * 1.45);
+            setCam([cm[0][0], cm[0][1] + lift, cm[0][2]], [cm[1][0], cm[1][1] + lift, cm[1][2]], fov);
+            var hy = horizonY();
+            g.globalAlpha = 1;
+            g.fillStyle = P.sky[2]; g.fillRect(0, 0, W, H);
+            drawSky(hy, t);
+            if (hy < H) drawGround(hy);
+            [
+                { z: cam([TB.x, 1, TB.z])[2], f: drawRally },
+                { z: cam([BM.x + BM.L / 2, BM.y, BM.z])[2], f: drawBeam },
+                { z: cam(ATOM)[2], f: drawAtom }
+            ].sort(function (a, b) { return b.z - a.z; }).forEach(function (o) { if (o.z > -10) o.f(t); });
+            drawMotes(t);
+            g.globalAlpha = 1;
             if (!shown) { shown = true; root.classList.add('glon'); }
         }
-        function loop(now) {
-            raf = requestAnimationFrame(loop);
-            if (now - last < 32) return;
-            last = now; draw((now - t0) / 1000);
+        function frame(now) {
+            requestAnimationFrame(frame);
+            var dt = Math.min(.1, (now - last) / 1000); last = now;
+            if (!dt || document.hidden || mqReduce.matches) return;
+            var goal = Math.min(1, sy / maxScroll), moving = Math.abs(goal - cur) > 2e-4;
+            cur += (goal - cur) * (1 - Math.exp(-dt * 8));
+            if (intro < 1) intro = Math.min(1, intro + dt / 2.2);
+            tAcc += dt;
+            /* gliding or landing: every display frame; at rest the motes, electrons and ball still move, at about 30 fps */
+            if (!moving && intro >= 1 && now - drawn < 30) return;
+            drawn = now; draw(tAcc);
         }
-        function still() { draw(9); }
-        function start() {
-            cancelAnimationFrame(raf); raf = 0;
-            if (mqReduce.matches) still(); else raf = requestAnimationFrame(loop);
-        }
+        function still() { cur = Math.min(1, sy / maxScroll); draw(9); }
         function retheme() { dark = theme() === 'dark'; P = PAL[dark ? 'dark' : 'light']; seed(); if (mqReduce.matches) still(); }
 
         dark = theme() === 'dark'; P = PAL[dark ? 'dark' : 'light'];
-        size(); start();
-        var rt = 0;
+        size(); seed();
+        cur = Math.min(1, sy / maxScroll);
+        var looping = false;
+        function loop() { if (looping) return; looping = true; requestAnimationFrame(function (n) { last = n; requestAnimationFrame(frame); }); }
+        if (mqReduce.matches) { intro = 1; still(); } else loop();
+        if (typeof ResizeObserver !== 'undefined') new ResizeObserver(function () { measure(); if (mqReduce.matches) still(); }).observe(document.body);
+        var rq = 0;
         addEventListener('resize', function () {
-            cancelAnimationFrame(rt);
-            rt = requestAnimationFrame(function () { size(); if (mqReduce.matches) still(); });
+            cancelAnimationFrame(rq);
+            rq = requestAnimationFrame(function () { size(); if (mqReduce.matches) still(); });
         });
         addEventListener('scroll', function () {
-            scrollY = window.scrollY;
+            sy = window.scrollY;
             if (mqReduce.matches) requestAnimationFrame(still);
         }, { passive: true });
-        mqReduce.addEventListener('change', start);
+        mqReduce.addEventListener('change', function () { if (mqReduce.matches) { intro = 1; still(); } else loop(); });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (mqReduce.matches) still(); });
         return { retheme: retheme };
     })();
     syncTheme();
+
+    /* ---------- the scroll cue goes once the page has moved ---------- */
+    (function () {
+        var cue = document.getElementById('cue'), q = 0;
+        function f() { q = 0; cue.classList.toggle('away', window.scrollY > 40); }
+        addEventListener('scroll', function () { if (!q) q = requestAnimationFrame(f); }, { passive: true });
+        f();
+    })();
 
     /* ---------- windows can be picked up by their title bars ---------- */
     var wins = [].slice.call(document.querySelectorAll('#desk .win'));
