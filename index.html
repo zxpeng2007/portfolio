@@ -1,378 +1,861 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steven Peng</title>
-    <meta name="description" content="Steven Peng — Physics & Computer Science at the University of Pennsylvania. Humanoid robotics, motion generation, and physics-based AI.">
-    <meta property="og:title" content="Steven Peng">
-    <meta property="og:description" content="Physics & Computer Science at Penn. Humanoid robotics, motion generation, and physics-based AI.">
-    <meta property="og:url" content="https://zxpeng2007.github.io/portfolio/">
-    <meta property="og:image" content="https://zxpeng2007.github.io/portfolio/images/intern001.jpg">
-    <meta property="og:type" content="website">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23011F5B'/%3E%3Ctext x='50' y='68' font-size='52' font-family='Georgia,serif' fill='%23fff' text-anchor='middle'%3ESP%3C/text%3E%3C/svg%3E">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K9DJXMTLCS"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-K9DJXMTLCS');
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fffefb;
-            --text: #22211e;
-            --muted: #6d6c65;
-            --faint: #71716a;
-            --line: #e6e4da;
-            --link: #1a4a8f;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #191a1c;
-                --text: #e6e5e0;
-                --muted: #a4a39b;
-                --faint: #8a897f;
-                --line: #2e2f33;
-                --link: #93b4e3;
-            }
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
-            font-size: 17.5px;
-            line-height: 1.6;
-        }
-        .wrap { max-width: 1600px; margin: 0 auto; padding: 3.5rem clamp(1.4rem, 4vw, 4rem) 2.5rem; }
-        a { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2.5px; }
-        a:hover { text-decoration-thickness: 2px; }
-        p { margin-bottom: 0.9rem; }
-        p:last-child { margin-bottom: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steven Peng</title>
+<meta name="description" content="Steven Peng — Physics & Computer Science at Penn and co-founder of Atom Industries. Humanoid robotics, motion generation, and AI-built physics simulations that check their own answers.">
+<meta property="og:title" content="Steven Peng">
+<meta property="og:description" content="Physics & CS at Penn, co-founder of Atom Industries. Humanoid robotics, motion generation, and verified physics simulation.">
+<meta property="og:url" content="https://zxpeng2007.github.io/portfolio/">
+<meta property="og:image" content="https://zxpeng2007.github.io/portfolio/images/intern001.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f3f7fd">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 20 20' shape-rendering='crispEdges'%3E%3Crect x='-2' y='-2' width='20' height='20' fill='%237fd9e4'/%3E%3Cpath fill='%230b3a4e' d='M7 1h2v1h-2zM6 2h1v1h-1zM9 2h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM5 4h1v1h-1zM10 4h1v1h-1zM1 5h14v1h-14zM0 6h1v1h-1zM4 6h1v1h-1zM11 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM4 7h1v1h-1zM7 7h2v1h-2zM11 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM4 8h1v1h-1zM7 8h2v1h-2zM11 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM4 9h1v1h-1zM11 9h1v1h-1zM15 9h1v1h-1zM1 10h14v1h-14zM5 11h1v1h-1zM10 11h1v1h-1zM6 12h1v1h-1zM9 12h1v1h-1zM6 13h1v1h-1zM9 13h1v1h-1zM7 14h2v1h-2z'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/dotgothic16-latin.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K9DJXMTLCS"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K9DJXMTLCS');
+</script>
+<script>
+    /* Apply a saved light/dark choice before first paint; otherwise follow the system. */
+    (function () { try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {} })();
+</script>
+<style>
+/* Pixel type: DotGothic16 by the DotGothic16 Project Authors, SIL Open Font License 1.1 (fonts/OFL.txt). */
+@font-face { font-family: "DotGothic16"; src: url(fonts/dotgothic16-latin.woff2) format("woff2"); font-display: swap; }
 
-        /* ---------- header: photo · identity · intro across the page ---------- */
-        .head {
-            display: grid;
-            grid-template-columns: auto auto 1fr;
-            gap: 2.4rem;
-            align-items: start;
-            margin-bottom: 2.6rem;
-        }
-        .head img {
-            width: 148px;
-            height: 185px;
-            object-fit: cover;
-            object-position: top;
-            border-radius: 4px;
-        }
-        .head h1 { font-size: 2.2rem; font-weight: 500; line-height: 1.15; margin: 0.1rem 0 0.5rem; }
-        .head .sub { color: var(--muted); margin-bottom: 0.2rem; }
-        .head .links { margin-top: 0.8rem; font-size: 0.95rem; }
-        .head .links a { margin-right: 0.9rem; }
-        .head .intro {
-            max-width: 44rem;
-            font-size: 1.05rem;
-            padding-top: 0.35rem;
-            justify-self: end;
-            color: var(--muted);
-        }
-        .head .intro strong { color: var(--text); font-weight: 500; }
+:root {
+    --aqua: #7fd9e4; --panel: #bfeef2; --pale: #e9fbfc; --line: #4fb9c9;
+    --deep: #0b3a4e; --mute: #3f7486; --red: #e0304e;
+    --void: #f3f7fd;
+    --win: rgba(233, 251, 252, .9);
+    --name: #2a8aa0; --tag: #3f7486; --cue: rgba(11, 58, 78, .42); --endfg: #3f7486;
+    --sh: rgba(10, 42, 120, .22); --vig: rgba(20, 64, 160, .10); --grain: .07;
+    --px: "DotGothic16", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --pxs: 12px; --pxm: 16px; --pxl: 24px;
+    --duo: grayscale(1) sepia(1) hue-rotate(165deg) saturate(2.2) contrast(1.12) brightness(.98);
+    color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --void: #000; --win: rgba(214, 236, 240, .95); --mute: #2d5f70;
+        --name: #7fd9e4; --tag: #9fdfe9; --cue: rgba(255, 255, 255, .72); --endfg: #9fdfe9;
+        --sh: rgba(0, 0, 0, .55); --vig: rgba(0, 8, 34, .46); --grain: .09;
+        color-scheme: dark;
+    }
+}
+:root[data-theme="dark"] {
+    --void: #000; --win: rgba(214, 236, 240, .95); --mute: #2d5f70;
+    --name: #7fd9e4; --tag: #9fdfe9; --cue: rgba(255, 255, 255, .72); --endfg: #9fdfe9;
+    --sh: rgba(0, 0, 0, .55); --vig: rgba(0, 8, 34, .46); --grain: .09;
+    color-scheme: dark;
+}
 
-        /* ---------- sections: label rail on the left, content filling the rest ---------- */
-        section {
-            display: grid;
-            grid-template-columns: 200px minmax(0, 1fr);
-            gap: 2.5rem;
-            border-top: 1px solid var(--line);
-            padding: 2.2rem 0;
-        }
-        h2 {
-            font-variant: small-caps;
-            letter-spacing: 0.06em;
-            font-weight: 500;
-            font-size: 1.15rem;
-            line-height: 1.3;
-        }
+* { box-sizing: border-box; }
+html { background: var(--void); }
+body {
+    margin: 0;
+    background: var(--void);
+    color: var(--deep);
+    font: 400 var(--pxm)/1.45 var(--px);
+    -webkit-font-smoothing: none;
+    font-synthesis: none;
+    font-variant-ligatures: none;
+    overflow-x: clip;
+}
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+svg.px { display: block; shape-rendering: crispEdges; }
 
-        /* ---------- entries: meta · text · photo columns ---------- */
-        .entry {
-            display: grid;
-            grid-template-columns: 230px minmax(0, 1fr);
-            gap: 2.5rem;
-            margin-bottom: 2.2rem;
-        }
-        .entry:last-child { margin-bottom: 0; }
-        .entry:has(figure) { grid-template-columns: 230px minmax(0, 1fr) 260px; }
-        .entry h3 { font-size: 1.02em; font-weight: 600; line-height: 1.35; }
-        .entry .role { color: var(--muted); font-size: 0.92em; margin: 0.25rem 0 0.1rem; }
-        .entry .when { color: var(--faint); font-size: 0.88em; margin: 0; }
-        .entry .body { max-width: 70ch; }
-        .entry .body p { font-size: 0.97em; margin-bottom: 0.55rem; }
-        .entry .body p:last-child { margin-bottom: 0; }
+/* ---------- the scene, the grain and the vignette ---------- */
+#gl {
+    position: fixed; left: 0; top: 0; width: 100%; height: 100vh; height: 100lvh;
+    display: block; z-index: 0; pointer-events: none;
+    image-rendering: pixelated; image-rendering: crisp-edges;
+    opacity: 0; transition: opacity .8s ease;
+}
+html.glon #gl { opacity: 1; }
+#vig { position: fixed; inset: 0; z-index: 79; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, transparent 55%, var(--vig) 100%); }
+#grain {
+    position: fixed; left: -120px; top: -120px; width: calc(100vw + 240px); height: calc(100vh + 240px);
+    z-index: 80; pointer-events: none; opacity: var(--grain);
+    background-size: 256px 256px; image-rendering: pixelated;
+    animation: grain .5s steps(1) infinite;
+}
+@keyframes grain {
+    0% { transform: translate(0, 0); } 25% { transform: translate(57px, -38px); }
+    50% { transform: translate(-41px, 66px); } 75% { transform: translate(23px, 44px); }
+}
+#page { position: relative; z-index: 1; }
 
-        figure { width: 100%; }
-        figure.portrait { max-width: 190px; justify-self: end; }
-        figure img, figure video {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 4px;
-            border: 1px solid var(--line);
-        }
-        figcaption {
-            font-style: italic;
-            font-size: 0.82em;
-            color: var(--faint);
-            margin-top: 0.4rem;
-            line-height: 1.45;
-        }
+/* ---------- hero ---------- */
+#hero {
+    position: relative; height: 100vh; height: 100svh; min-height: 480px;
+    padding: calc(26px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 0 max(32px, env(safe-area-inset-left, 0px));
+}
+#hero h1 { position: relative; display: inline-block; margin: 0; font: 400 48px/1 var(--px); color: var(--name); }
+#hero h1 [aria-hidden]::before, #hero h1 [aria-hidden]::after {
+    content: attr(data-n); position: absolute; left: 0; top: 0; visibility: hidden;
+    animation: flash 7.2s steps(1) infinite;
+}
+#hero h1 [aria-hidden]::before { color: var(--aqua); text-shadow: -2px 0 var(--line), 2px 0 var(--panel); }
+#hero h1 [aria-hidden]::after { color: var(--name); background: transparent; clip-path: inset(58% -4% 22% -4%); animation-name: tear; }
+#hero h1 [aria-hidden] { position: relative; }
+@keyframes flash {
+    0%, 71.9% { visibility: hidden; transform: none; }
+    72% { visibility: visible; transform: translateX(-.06em); }
+    72.8% { visibility: visible; transform: translateX(.04em); }
+    73.6%, 80% { visibility: hidden; transform: none; }
+    80.1% { visibility: visible; transform: translateX(.03em); }
+    80.8%, 100% { visibility: hidden; transform: none; }
+}
+@keyframes tear {
+    0%, 71.9% { visibility: hidden; transform: none; }
+    72% { visibility: visible; transform: translateX(.1em); }
+    72.6% { visibility: visible; transform: translateX(-.05em); }
+    73.4%, 80.2% { visibility: hidden; transform: none; }
+    80.3% { visibility: visible; transform: translateX(-.08em); }
+    80.9%, 100% { visibility: hidden; transform: none; }
+}
+#hero .tag { margin-top: 12px; font-size: var(--pxm); line-height: 1.25; color: var(--tag); }
+#cue {
+    position: absolute; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    width: 56px; height: 44px; margin-left: -28px; display: grid; place-items: center;
+    color: var(--cue); animation: nod 2.4s ease-in-out infinite;
+}
+#cue svg { width: 44px; height: 28px; }
+@keyframes nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
-        /* ---------- wide lists ---------- */
-        ul.plain { list-style: none; }
-        ul.plain li { margin-bottom: 0.45rem; font-size: 0.97em; break-inside: avoid; }
-        ul.plain .year { color: var(--faint); font-size: 0.9em; margin-right: 0.6rem; }
-        ul.cols { columns: 2 24rem; column-gap: 3.5rem; }
-        .pairs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-            gap: 1.2rem 3.5rem;
-        }
-        .pairs dt {
-            font-size: 0.82em;
-            color: var(--faint);
-            font-variant: small-caps;
-            letter-spacing: 0.05em;
-        }
-        .pairs dd { margin: 0; font-size: 0.97em; }
+/* ---------- corner key ---------- */
+#prefs { position: fixed; z-index: 85; top: calc(6px + env(safe-area-inset-top, 0px)); right: max(6px, env(safe-area-inset-right, 0px)); }
+#mode { all: unset; display: grid; place-items: center; width: 40px; height: 40px; cursor: pointer; color: var(--deep); -webkit-tap-highlight-color: transparent; }
+#mode:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+.k-glass {
+    display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.62) 55%, rgba(255,255,255,.8));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.95), 0 1px 3px var(--sh);
+}
+#mode svg { width: 12px; height: 12px; }
+#mode[data-s="dark"] .i-moon, #mode:not([data-s="dark"]) .i-sun { display: none; }
+@media (hover: hover) { #mode:hover .k-glass, .links a:hover .k-glass { background: var(--panel); } }
 
-        footer {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
-            border-top: 1px solid var(--line);
-            padding-top: 1.4rem;
-            font-size: 0.88em;
-            color: var(--faint);
-        }
+/* ---------- the desk: windows dropped in two lanes ---------- */
+#desk {
+    display: flex; align-items: flex-start; gap: 44px;
+    max-width: 1360px; margin-inline: auto;
+    padding: 9vh max(16px, env(safe-area-inset-right, 0px)) 7vh max(16px, env(safe-area-inset-left, 0px));
+}
+.lane { display: flex; flex-direction: column; align-items: flex-start; gap: 44px; min-width: 0; }
+.lane.a { flex: 1 1 0; }
+.lane.b { flex: 1.12 1 0; padding-top: 15vh; }
+#about { width: min(100%, 470px); align-self: flex-end; }
+#experience { width: 100%; }
+#education { width: 86%; align-self: flex-end; }
+#skills { width: 94%; }
+#atom { width: 100%; }
+#research { width: 94%; align-self: flex-end; }
+#honors { width: 84%; }
 
-        /* ---------- narrower screens ---------- */
-        @media (max-width: 1150px) {
-            .entry:has(figure) { grid-template-columns: 230px minmax(0, 1fr); }
-            .entry figure { grid-column: 2; max-width: 320px; }
-            .entry figure.portrait { justify-self: start; }
-        }
-        @media (max-width: 1000px) {
-            .head { grid-template-columns: auto 1fr; }
-            .head .intro { grid-column: 1 / -1; justify-self: start; padding-top: 0; }
-        }
-        @media (max-width: 860px) {
-            section { grid-template-columns: 1fr; gap: 1.2rem; }
-            .entry, .entry:has(figure) { grid-template-columns: 1fr; gap: 0.6rem; }
-            .entry figure { grid-column: 1; margin-top: 0.4rem; }
-        }
-        @media (max-width: 560px) {
-            .wrap { padding-top: 2.5rem; }
-            .head { grid-template-columns: 1fr; gap: 1.1rem; }
-            .head img { width: 132px; height: 165px; }
-        }
-    </style>
+/* ---------- a window ---------- */
+.win {
+    position: relative; display: flex; flex-direction: column; min-width: 0;
+    background: var(--win);
+    border: 2px solid var(--aqua); outline: 1px solid var(--line);
+}
+.win.feat, .win.drag, .win.ov { box-shadow: 8px 8px 0 var(--deep); }
+.bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    min-height: 30px; padding: 3px 8px 3px 10px; background: var(--aqua); user-select: none;
+}
+.bar h2 { margin: 0; min-width: 0; font: 400 var(--pxl)/1 var(--px); color: var(--deep); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar .k { font-size: var(--pxs); line-height: 1; color: var(--deep); white-space: nowrap; }
+@media (min-width: 900px) and (pointer: fine) { #desk .win > .bar { cursor: move; } }
+html.dragging, html.dragging * { cursor: move !important; user-select: none; }
+
+/* windows that carry pictures: words on the left, clippings in a column on the right */
+.win.cols { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; }
+.win.cols > * { grid-column: 1; grid-row: 2; }
+.win.cols > .bar { grid-column: 1 / -1; grid-row: 1; }
+.win.cols > .scraps { grid-column: 2; grid-row: 2 / 4; }
+.win.cols > .more { grid-row: 3; }
+
+/* ---------- about ---------- */
+.me { padding: 10px 14px 6px; }
+.me .top { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; }
+.me .who { font-size: var(--pxl); line-height: 1.2; }
+.me .who span { margin-left: .6em; font-size: var(--pxs); color: var(--mute); }
+.me .motto { color: var(--mute); line-height: 1.25; }
+.me .avatar {
+    flex: none; width: 84px; height: 104px; object-fit: cover; object-position: 50% 22%;
+    border: 2px solid #fff; outline: 1px solid var(--line); filter: var(--duo);
+    transform: rotate(2.5deg); margin: 2px 2px 0 0; transition: filter .35s ease;
+}
+.me .avatar:hover { filter: none; }
+.me .bio { margin-top: 8px; line-height: 1.4; }
+.me .aff { margin-top: 10px; font-size: var(--pxs); line-height: 1.4; color: var(--mute); }
+.me .aff a { text-decoration: none; }
+@media (hover: hover) { .me .aff a:hover { color: var(--deep); background: var(--panel); } }
+.links { display: flex; flex-wrap: wrap; list-style: none; margin: 6px 0 0 -5px; padding: 0; }
+.links a { display: grid; place-items: center; width: 40px; height: 40px; color: var(--deep); -webkit-tap-highlight-color: transparent; }
+.links a:focus-visible { outline-offset: -2px; }
+.links svg { width: 16px; height: 16px; }
+
+/* ---------- rows: experience, research, honours, education ---------- */
+.rows { list-style: none; margin: 0; padding: 0; }
+.rows > li { padding: 7px 12px 9px; }
+.rows > li + li { border-top: 1px solid var(--panel); }
+.rows .t { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; line-height: 1.25; }
+.rows .t .k, .rows .n { font-size: var(--pxs); color: var(--mute); white-space: nowrap; }
+.rows .s { margin-top: 2px; font-size: var(--pxs); line-height: 1.4; color: var(--mute); }
+.rows .d { margin-top: 6px; line-height: 1.45; }
+.rows .d + .d { margin-top: 6px; }
+.rows.num > li { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; }
+.rows.num .n { padding-top: 3px; }
+.rows a, .atom a { color: var(--deep); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+@media (hover: hover) {
+    .rows > li { transition: background-color .15s ease; }
+    .rows > li:hover { background: var(--panel); }
+    .rows a:hover, .atom a:hover { background: var(--pale); }
+}
+.rows.tight > li { padding: 5px 12px 6px; }
+
+/* key/value lines */
+.kv { margin: 0; }
+.kv > div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding: 5px 0; }
+.kv > div + div { border-top: 1px solid var(--panel); }
+.kv dt { font-size: var(--pxs); line-height: 1.9; color: var(--mute); text-transform: uppercase; letter-spacing: .08em; }
+.kv dd { margin: 0; line-height: 1.4; }
+#skills .kv { padding: 4px 12px 8px; }
+
+/* ---------- atom industries ---------- */
+.atom { padding: 12px 14px 4px; }
+.atom .lede { font-size: var(--pxl); line-height: 1.2; }
+.atom .kv { margin-top: 10px; }
+.atom .note { margin-top: 10px; font-size: var(--pxs); line-height: 1.5; color: var(--mute); }
+.badge {
+    display: inline-block; padding: 1px 6px 0; margin: 1px 2px 1px 0;
+    font-size: var(--pxs); line-height: 1.5; letter-spacing: .06em;
+    border: 1px solid var(--line); background: var(--panel); color: var(--deep);
+}
+.badge.ok { border-color: #3a9d63; background: #dbf5e5; color: #145c35; }
+.badge.no { border-color: #d0405a; background: #fde4e8; color: #8f1a31; }
+
+/* ---------- more: a key that leads on ---------- */
+.more { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding: 6px 12px 12px; }
+.more a {
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px 3px;
+    font: 400 var(--pxm)/1 var(--px); color: var(--deep); text-decoration: none;
+    background: var(--panel); border: 1px solid var(--line); box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+}
+.more a::after { content: ""; width: 0; height: 0; border: 4px solid transparent; border-left: 6px solid currentColor; border-right: 0; }
+.more a:focus-visible { outline: 2px solid var(--deep); outline-offset: 2px; }
+@media (hover: hover) { .more a:hover { background: var(--aqua); } }
+
+/* ---------- clippings: pictures lying loose in a window ---------- */
+.scraps { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 18px 16px 22px; min-width: 0; }
+.scraps > * {
+    display: block; width: var(--w, 92%); height: auto; margin-top: -16px;
+    border: 3px solid #fff; outline: 1px solid var(--line); box-shadow: 0 2px 6px var(--sh);
+    transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg));
+    filter: var(--duo); transition: filter .35s ease, transform .35s ease;
+    background: var(--panel);
+}
+.scraps > :first-child { margin-top: 0; }
+.scraps > .vid { position: relative; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+.vid video { display: block; width: 100%; height: auto; }
+.vid.paused::after {
+    content: ""; position: absolute; left: 50%; top: 50%; margin: -12px 0 0 -7px;
+    border: 12px solid transparent; border-left: 18px solid #fff; border-right: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.45));
+}
+.scraps > .raw { filter: saturate(.9); }
+.scraps > :hover { filter: none; position: relative; z-index: 2; transform: translate(var(--x, 0), var(--y, 0)) rotate(0deg) scale(1.04); }
+
+/* ---------- footer ---------- */
+#end {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px;
+    padding: 0 16px calc(28px + env(safe-area-inset-bottom, 0px));
+    font-size: var(--pxs); color: var(--endfg);
+}
+#end a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- narrower: the same windows, one staggered column ---------- */
+@media (max-width: 1179px) {
+    #desk { flex-direction: column; align-items: stretch; gap: 40px; max-width: 800px; padding-top: 6vh; }
+    .lane { display: contents; }
+    #about { order: 1; width: min(88%, 460px); align-self: flex-start; margin-right: 0; }
+    #atom { order: 2; width: 100%; }
+    #experience { order: 3; width: 96%; align-self: flex-end; }
+    #research { order: 4; width: 96%; align-self: flex-start; }
+    #honors { order: 5; width: 90%; align-self: flex-end; }
+    #education { order: 6; width: 86%; align-self: flex-start; }
+    #skills { order: 7; width: 92%; align-self: flex-end; }
+}
+@media (max-width: 699px) {
+    :root { --pxl: 20px; }
+    #hero { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-top: calc(18px + env(safe-area-inset-top, 0px)); }
+    #hero h1 { font-size: 36px; }
+    #desk { gap: 30px; }
+    #desk .win { width: calc(100% - 10px) !important; }
+    .win.feat { box-shadow: 6px 6px 0 var(--deep); }
+    .win.cols { display: flex; }
+    .scraps { flex-direction: row; justify-content: center; padding: 6px 14px 18px; }
+    .scraps > * { width: var(--mw, 46%); margin: 0 0 0 -10px; }
+    .scraps > :first-child { margin-left: 0; }
+    .kv > div { grid-template-columns: 64px minmax(0, 1fr); }
+    .me .avatar { width: 72px; height: 90px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #grain, #cue, #hero h1 [aria-hidden]::before, #hero h1 [aria-hidden]::after { animation: none; }
+    .scraps > *, .me .avatar { transition: none; }
+}
+</style>
 </head>
 <body>
-    <div class="wrap">
-        <header class="head">
-            <img src="images/intern001.jpg" alt="Steven Peng holding a small humanoid robot at the Horizon Robotics lab">
-            <div>
-                <h1>Steven Peng</h1>
-                <p class="sub">Physics &amp; Computer Science<br>University of Pennsylvania, Class of 2030</p>
-                <p class="sub">Philadelphia, PA</p>
-                <p class="links">
-                    <a href="mailto:zxpeng2007@gmail.com">Email</a>
-                    <a href="https://github.com/zxpeng2007">GitHub</a>
-                </p>
-            </div>
-            <p class="intro">I work on <strong>humanoid robotics, motion generation, and
-            physics-based AI</strong> &mdash; most recently teaching a Unitree G1 to play
-            table tennis. Before Penn, I captained China&rsquo;s national team at the
-            International Young Physicists&rsquo; Tournament.</p>
-        </header>
+<canvas id="gl" aria-hidden="true"></canvas>
 
-        <main>
-        <section id="experience">
-            <h2>Experience</h2>
-            <div>
-                <div class="entry">
-                    <div class="meta">
-                        <h3>Horizon Robotics</h3>
-                        <p class="role">Robotics Lab Intern, Physics &amp; AI</p>
-                        <p class="when">Summer 2026 &middot; Beijing</p>
+<div id="prefs">
+    <button id="mode" type="button" aria-label="Switch to dark theme"><span class="k-glass">
+        <svg class="px i-moon" viewBox="0 0 12 12" aria-hidden="true"><path fill="currentColor" d="M4 0h4v1h-4zM2 1h4v1h-4zM1 2h4v1h-4zM1 3h3v1h-3zM0 4h4v1h-4zM0 5h4v1h-4zM0 6h4v1h-4zM0 7h5v1h-5zM1 8h5v1h-5zM10 8h1v1h-1zM1 9h10v1h-10zM2 10h8v1h-8zM4 11h4v1h-4z"/></svg>
+        <svg class="px i-sun" viewBox="0 0 12 12" aria-hidden="true"><path fill="currentColor" d="M5 0h2v1h-2zM1 1h1v1h-1zM10 1h1v1h-1zM2 2h1v1h-1zM4 2h4v1h-4zM9 2h1v1h-1zM3 3h6v1h-6zM2 4h8v1h-8zM0 5h1v1h-1zM2 5h8v1h-8zM11 5h1v1h-1zM0 6h1v1h-1zM2 6h8v1h-8zM11 6h1v1h-1zM2 7h8v1h-8zM3 8h6v1h-6zM2 9h1v1h-1zM4 9h4v1h-4zM9 9h1v1h-1zM1 10h1v1h-1zM10 10h1v1h-1zM5 11h2v1h-2z"/></svg>
+    </span></button>
+</div>
+
+<div id="page">
+    <header id="hero">
+        <h1><span class="vh">Steven Peng</span><span aria-hidden="true" data-n="/steven">/steven</span></h1>
+        <p class="tag">physics &middot; humanoid robots &middot; simulations that check themselves</p>
+        <a id="cue" href="#desk" aria-label="Scroll to the rest of the page"><svg class="px" viewBox="0 0 11 7" aria-hidden="true"><path fill="currentColor" d="M0 0h1v1h-1zM10 0h1v1h-1zM0 1h2v1h-2zM9 1h2v1h-2zM1 2h2v1h-2zM8 2h2v1h-2zM2 3h2v1h-2zM7 3h2v1h-2zM3 4h2v1h-2zM6 4h2v1h-2zM4 5h3v1h-3zM5 6h1v1h-1z"/></svg></a>
+    </header>
+
+    <main id="desk">
+        <div class="lane a">
+            <section class="win" id="about" aria-labelledby="t-about">
+                <header class="bar"><h2 id="t-about">About Me</h2></header>
+                <div class="me">
+                    <div class="top">
+                        <div>
+                            <p class="who">Steven Peng<span>Zixuan</span></p>
+                            <p class="motto">Physics &amp; CS at Penn, class of 2030.</p>
+                        </div>
+                        <img class="avatar" src="images/intern001.jpg" width="1280" height="1591" alt="Steven Peng holding a small humanoid robot at the Horizon Robotics lab">
                     </div>
-                    <div class="body">
-                        <p>Built a humanoid table-tennis pipeline for the 29-DoF Unitree G1,
-                        converting human video into whole-body robot motion through GMR retargeting
-                        and <a href="https://github.com/HorizonRobotics/HoloMotion">HoloMotion</a>
-                        tracking at 50&nbsp;Hz with 500&nbsp;Hz motor PD; credited author on
-                        HoloMotion v2.0.</p>
-                        <p>Wrote both halves of that pipeline myself:
-                        <a href="https://github.com/zxpeng2007/rally3d">Rally3D</a>, which turns
-                        monocular WTT/ITTF broadcast footage into synchronized metric 3D ball
-                        trajectories, player poses, and table/camera geometry (up to 92% 2D ball
-                        coverage on clean rallies); and
-                        <a href="https://github.com/zxpeng2007/Hand2Body">Hand2Body</a>, a causal
-                        streaming diffusion model mapping one or two wrist trajectories to 135-D
-                        whole-body SMPL motion &mdash; 20.7&nbsp;mm MPJPE and 8.5&nbsp;mm /
-                        0.72&deg; wrist tracking at ~1.6&nbsp;ms per frame, validated in MuJoCo
-                        and documented for on-robot ROS2 deployment.</p>
-                    </div>
+                    <p class="bio">I work on humanoid robotics, motion generation and physics-based AI &mdash; most recently teaching a Unitree G1 to play table tennis. Now I&rsquo;m building Atom, which lets engineers use AI to build simulations and checks every answer before anyone relies on it. Before Penn, I captained China&rsquo;s national team at the International Young Physicists&rsquo; Tournament.</p>
+                    <p class="aff"><a href="https://www.upenn.edu/">University of Pennsylvania</a> &middot; <a href="https://atomindustries.co">Atom Industries</a> &middot; <a href="https://github.com/HorizonRobotics">Horizon Robotics</a></p>
+                    <ul class="links">
+                        <li><a href="mailto:zxpeng2007@gmail.com" aria-label="Email"><span class="k-glass"><svg class="px" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M0 3h16v1h-16zM0 4h2v1h-2zM14 4h2v1h-2zM0 5h1v1h-1zM2 5h1v1h-1zM13 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM3 6h1v1h-1zM12 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM4 7h1v1h-1zM11 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM5 8h1v1h-1zM10 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM6 9h4v1h-4zM15 9h1v1h-1zM0 10h1v1h-1zM15 10h1v1h-1zM0 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM15 12h1v1h-1zM0 13h16v1h-16z"/></svg></span></a></li>
+                        <li><a href="https://github.com/zxpeng2007" aria-label="GitHub"><span class="k-glass"><svg class="px" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M5 0h6v1h-6zM3 1h10v1h-10zM2 2h12v1h-12zM1 3h2v1h-2zM4 3h8v1h-8zM13 3h2v1h-2zM1 4h2v1h-2zM13 4h2v1h-2zM0 5h2v1h-2zM14 5h2v1h-2zM0 6h2v1h-2zM14 6h2v1h-2zM0 7h2v1h-2zM14 7h2v1h-2zM0 8h2v1h-2zM14 8h2v1h-2zM0 9h2v1h-2zM14 9h2v1h-2zM1 10h2v1h-2zM13 10h2v1h-2zM1 11h1v1h-1zM3 11h3v1h-3zM10 11h5v1h-5zM2 12h1v1h-1zM4 12h3v1h-3zM9 12h5v1h-5zM3 13h4v1h-4zM9 13h4v1h-4zM5 14h2v1h-2zM9 14h2v1h-2z"/></svg></span></a></li>
+                        <li><a href="https://atomindustries.co" aria-label="Atom Industries"><span class="k-glass"><svg class="px" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M7 1h2v1h-2zM6 2h1v1h-1zM9 2h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM5 4h1v1h-1zM10 4h1v1h-1zM1 5h14v1h-14zM0 6h1v1h-1zM4 6h1v1h-1zM11 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM4 7h1v1h-1zM7 7h2v1h-2zM11 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM4 8h1v1h-1zM7 8h2v1h-2zM11 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM4 9h1v1h-1zM11 9h1v1h-1zM15 9h1v1h-1zM1 10h14v1h-14zM5 11h1v1h-1zM10 11h1v1h-1zM6 12h1v1h-1zM9 12h1v1h-1zM6 13h1v1h-1zM9 13h1v1h-1zM7 14h2v1h-2z"/></svg></span></a></li>
+                    </ul>
                 </div>
+            </section>
 
-                <div class="entry">
-                    <div class="meta">
-                        <h3>Horizon Robotics</h3>
-                        <p class="role">Robotics Lab Intern, Physics &amp; AI</p>
-                        <p class="when">Summer 2025 &middot; Beijing</p>
-                    </div>
-                    <div class="body">
-                        <p>Built a Stanford ToddlerBot from Dynamixel actuators and a Jetson Orin,
-                        trained MJX/Brax reinforcement-learning locomotion policies, and deployed
-                        them sim-to-real through hardware calibration, domain randomization, and
-                        zero-shot transfer.</p>
-                    </div>
-                    <figure class="portrait">
-                        <video src="images/robot001.mp4" poster="images/robot001-poster.jpg" width="720" height="1280"
-                               autoplay muted loop playsinline controls preload="metadata"
-                               aria-label="The ToddlerBot humanoid robot taking steps in the lab"></video>
-                        <figcaption>The ToddlerBot, learning to walk.</figcaption>
-                    </figure>
+            <section class="win cols" id="experience" aria-labelledby="t-exp">
+                <header class="bar"><h2 id="t-exp">Experience</h2><span class="k">03</span></header>
+                <ul class="rows">
+                    <li>
+                        <p class="t"><span>Horizon Robotics</span><span class="k">2026</span></p>
+                        <p class="s">Robotics Lab Intern, Physics &amp; AI &middot; Beijing</p>
+                        <p class="d">Built a humanoid table-tennis pipeline for the 29-DoF Unitree G1 that turns human video into whole-body robot motion, through GMR retargeting and <a href="https://github.com/HorizonRobotics/HoloMotion">HoloMotion</a> tracking at 50&nbsp;Hz with 500&nbsp;Hz motor PD; credited author on HoloMotion v2.0.</p>
+                        <p class="d">Wrote both halves myself: <a href="https://github.com/zxpeng2007/rally3d">Rally3D</a> recovers metric 3D ball trajectories, player poses and table/camera geometry from monocular WTT/ITTF broadcast footage (up to 92% 2D ball coverage on clean rallies); <a href="https://github.com/zxpeng2007/Hand2Body">Hand2Body</a>, a causal streaming diffusion model, maps one or two wrist trajectories to 135-D whole-body SMPL motion &mdash; 20.7&nbsp;mm MPJPE and 8.5&nbsp;mm / 0.72&deg; wrist tracking at ~1.6&nbsp;ms per frame, validated in MuJoCo.</p>
+                    </li>
+                    <li>
+                        <p class="t"><span>Horizon Robotics</span><span class="k">2025</span></p>
+                        <p class="s">Robotics Lab Intern, Physics &amp; AI &middot; Beijing</p>
+                        <p class="d">Built a Stanford ToddlerBot from Dynamixel actuators and a Jetson Orin, trained MJX/Brax reinforcement-learning locomotion policies, and deployed them sim-to-real through hardware calibration, domain randomization and zero-shot transfer.</p>
+                    </li>
+                    <li>
+                        <p class="t"><span>IYPT Team China</span><span class="k">2023&ndash;25</span></p>
+                        <p class="s">Team Captain</p>
+                        <p class="d">Selected as one of five national team members through five rounds and elected captain. Led Team China to gold and second place overall at IYPT 2025 &mdash; the team&rsquo;s all-time high score &mdash; designing experiments and models for more than fifteen open-ended physics problems.</p>
+                    </li>
+                </ul>
+                <div class="scraps">
+                    <button class="vid" type="button" aria-label="Pause the video of the ToddlerBot humanoid robot taking steps in the lab" title="The ToddlerBot, learning to walk" style="--w:72%;--mw:38%;--r:-2.5deg;--x:-8%"><video src="images/robot001.mp4" poster="images/robot001-poster.jpg" width="720" height="1280" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video></button>
+                    <img src="images/iypt-gold001.jpg" width="1000" height="667" alt="Team China on stage at IYPT 2025 in Lund, Sweden, receiving the gold medal" title="IYPT 2025, Lund — gold medal, 2nd overall" loading="lazy" style="--w:100%;--mw:56%;--r:3deg;--x:4%">
                 </div>
+            </section>
 
-                <div class="entry">
-                    <div class="meta">
-                        <h3>IYPT Team China</h3>
-                        <p class="role">Team Captain</p>
-                        <p class="when">2023&ndash;2025</p>
-                    </div>
-                    <div class="body">
-                        <p>Selected as one of five national team members through five rounds and
-                        elected captain. Led Team China to a gold medal and second place overall at
-                        IYPT 2025 &mdash; the team&rsquo;s all-time high score &mdash; designing
-                        experiments and quantitative models for more than fifteen open-ended
-                        physics problems and calling real-time tactics in competitive physics
-                        debates.</p>
-                    </div>
-                    <figure>
-                        <img src="images/iypt-gold001.jpg" width="1000" height="667" alt="Team China on stage at IYPT 2025 receiving the gold medal" loading="lazy">
-                        <figcaption>IYPT 2025, Lund, Sweden &mdash; gold medal, 2nd overall.</figcaption>
-                    </figure>
+            <section class="win" id="education" aria-labelledby="t-edu">
+                <header class="bar"><h2 id="t-edu">Education</h2></header>
+                <ul class="rows tight">
+                    <li><p class="t"><span>University of Pennsylvania</span><span class="k">2030</span></p><p class="s">B.A. in Physics &amp; Computer Science</p></li>
+                    <li><p class="t"><span>Nanjing Foreign Language School</span><span class="k">2026</span></p></li>
+                </ul>
+            </section>
+
+            <section class="win" id="skills" aria-labelledby="t-skills">
+                <header class="bar"><h2 id="t-skills">Skills</h2></header>
+                <dl class="kv">
+                    <div><dt>code</dt><dd>Python &middot; C &middot; Assembly &middot; JavaScript &middot; MATLAB &middot; SQL</dd></div>
+                    <div><dt>tools</dt><dd>PyTorch &middot; CUDA &middot; MuJoCo &middot; Isaac Sim &middot; ROS2 &middot; Linux &middot; Weights &amp; Biases &middot; TensorBoard &middot; Postgres</dd></div>
+                </dl>
+            </section>
+        </div>
+
+        <div class="lane b">
+            <section class="win cols feat" id="atom" aria-labelledby="t-atom">
+                <header class="bar"><h2 id="t-atom">Atom Industries</h2><span class="k">co-founder &middot; now</span></header>
+                <div class="atom">
+                    <p class="lede">Atom builds physics simulations for engineers and researchers, and verifies every result before anyone relies on it.</p>
+                    <dl class="kv">
+                        <div><dt>build</dt><dd>An AI agent builds or edits the model in your own COMSOL Multiphysics&reg; 6.4, from a plain-language description or an existing .mph file.</dd></div>
+                        <div><dt>verify</dt><dd>Twelve checks read the solver&rsquo;s own output &mdash; provenance, units, spec conformance, load totals, mesh convergence, plausibility. Two of them solve the problem a second way, without COMSOL.</dd></div>
+                        <div><dt>verdict</dt><dd><span class="badge ok">VERIFIED</span> <span class="badge">CHECKED</span> <span class="badge no">REFUSED</span> &mdash; issued by check code, never by the agent.</dd></div>
+                        <div><dt>local</dt><dd>A Windows desktop app that runs against your own COMSOL license. No telemetry, no account.</dd></div>
+                    </dl>
+                    <p class="note">So far, on our development set: 13 of 13 planted errors caught with no false alarms on 11 correct models; a steel cantilever within 0.47% of its closed-form deflection. In private beta, and our entry in the Meta Global AI Developer Hackathon (startup track).</p>
                 </div>
-            </div>
-        </section>
-
-        <section id="research">
-            <h2>Research</h2>
-            <div>
-                <div class="entry">
-                    <div class="meta">
-                        <h3>Acoustic Flame Suppression</h3>
-                        <p class="when">2025</p>
-                    </div>
-                    <div class="body">
-                        <p>Studied how sound extinguishes flames &mdash; an unsolved IYPT problem
-                        &mdash; with 400,000-fps schlieren photography; proposed vortex-induced
-                        oxygen depletion as the primary mechanism, with state-of-the-art
-                        theory&ndash;experiment matching.</p>
-                    </div>
-                    <figure>
-                        <img src="images/soundvsflame.png" width="1000" height="786" alt="Schlieren photography stages of acoustic flame extinction" loading="lazy">
-                        <figcaption>Schlieren stages of acoustic extinction, at 400,000 fps.</figcaption>
-                    </figure>
+                <div class="scraps">
+                    <img class="raw" src="images/atom-verify.webp" width="1168" height="876" alt="Atom verification report: a steel cantilever's tip deflection marked VERIFIED, with twelve checks and their measured values" loading="lazy" style="--w:100%;--r:-3deg;--x:-4%">
+                    <img class="raw" src="images/atom-soda-can.webp" width="852" height="640" alt="Atom checking a time-dependent model of a soda can cooling in an ice and salt bath against a series solution" loading="lazy" style="--w:90%;--r:4deg;--x:6%">
                 </div>
+                <div class="more"><a href="https://atomindustries.co/#demo">demo</a><a href="https://atomindustries.co">atomindustries.co</a></div>
+            </section>
 
-                <div class="entry">
-                    <div class="meta">
-                        <h3>Entangled Photon Pairs</h3>
-                        <p class="when">Nanjing University &middot; 2024</p>
-                    </div>
-                    <div class="body">
-                        <p>Generated entangled photon pairs via SPDC in Prof. Xiaosong Ma&rsquo;s
-                        lab and measured 16 polarization combinations to test the CHSH inequality:
-                        S&nbsp;=&nbsp;2.487 against the classical limit of 2.</p>
-                    </div>
+            <section class="win cols" id="research" aria-labelledby="t-research">
+                <header class="bar"><h2 id="t-research">Research</h2><span class="k">03</span></header>
+                <ol class="rows num">
+                    <li>
+                        <span class="n">01</span>
+                        <div>
+                            <p class="t"><span>Acoustic Flame Suppression</span><span class="k">2025</span></p>
+                            <p class="d">Studied how sound puts out flames &mdash; an open IYPT problem &mdash; with 400,000&nbsp;fps schlieren photography; proposed vortex-induced oxygen depletion as the main mechanism, with state-of-the-art theory&ndash;experiment agreement.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="n">02</span>
+                        <div>
+                            <p class="t"><span>Entangled Photon Pairs</span><span class="k">2024</span></p>
+                            <p class="s">Nanjing University</p>
+                            <p class="d">Generated entangled photon pairs via SPDC in Prof. Xiaosong Ma&rsquo;s lab and measured 16 polarization combinations to test the CHSH inequality: S&nbsp;=&nbsp;2.487 against the classical limit of 2.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="n">03</span>
+                        <div>
+                            <p class="t"><span>Non-Invasive Acoustic Counting</span><span class="k">2024</span></p>
+                            <p class="d">A CNN that counts objects sealed inside containers from their acoustic signatures. It earned an invention patent, a paper in the Cambridge Journal for Junior Scientists and, with me as team captain, gold at the 2024 S.-T. Yau High School Science Award (Physics) global finals.</p>
+                        </div>
+                    </li>
+                </ol>
+                <div class="scraps">
+                    <img src="images/soundvsflame.png" width="1000" height="786" alt="Schlieren photographs of the stages of acoustic flame extinction" title="Schlieren stages of acoustic extinction, at 400,000 fps" loading="lazy" style="--w:100%;--r:2.5deg;--x:3%">
+                    <img src="images/yau001.jpg" width="1000" height="667" alt="Gold prize ceremony at the S.-T. Yau High School Science Award with Prof. Shing-Tung Yau and Prof. Hirosi Ooguri" title="Gold, S.-T. Yau Science Award global finals" loading="lazy" style="--w:94%;--r:-3.5deg;--x:-5%">
                 </div>
+            </section>
 
-                <div class="entry">
-                    <div class="meta">
-                        <h3>Non-Invasive Acoustic Counting</h3>
-                        <p class="when">2024</p>
-                    </div>
-                    <div class="body">
-                        <p>Built a CNN that counts objects sealed inside containers from their
-                        acoustic signatures. The work earned an invention patent, a publication in
-                        the Cambridge Journal for Junior Scientists, and &mdash; as team captain
-                        &mdash; gold at the 2024 S.-T. Yau High School Science Award (Physics)
-                        global finals.</p>
-                    </div>
-                    <figure>
-                        <img src="images/yau001.jpg" width="1000" height="667" alt="Gold prize ceremony at the S.-T. Yau High School Science Award" loading="lazy">
-                        <figcaption>Gold, S.-T. Yau Science Award global finals, with Prof. Shing-Tung Yau and Prof. Hirosi Ooguri.</figcaption>
-                    </figure>
-                </div>
-            </div>
-        </section>
+            <section class="win" id="honors" aria-labelledby="t-honors">
+                <header class="bar"><h2 id="t-honors">Honors</h2><span class="k">07</span></header>
+                <ul class="rows tight">
+                    <li><p class="t"><span>IYPT &mdash; Gold Medal &amp; 2nd overall</span><span class="k">2025</span></p><p class="s">Team China captain</p></li>
+                    <li><p class="t"><span>S.-T. Yau Science Award (Physics) &mdash; Gold</span><span class="k">2024</span></p><p class="s">Global finals</p></li>
+                    <li><p class="t"><span>USAMO &mdash; Qualifier</span><span class="k">2024</span></p></li>
+                    <li><p class="t"><span>Duke Math Meet China &mdash; 1st Individual &amp; 1st Team</span><span class="k">2024</span></p><p class="s">Team captain</p></li>
+                    <li><p class="t"><span>HMMT February &mdash; Geometry, 13th of 651</span><span class="k">2024</span></p></li>
+                    <li><p class="t"><span>Physics Bowl &mdash; National Gold</span><span class="k">2024</span></p></li>
+                    <li><p class="t"><span>AMC 12B &mdash; Perfect Score</span><span class="k">2023</span></p></li>
+                </ul>
+            </section>
+        </div>
+    </main>
 
-        <section id="honors">
-            <h2>Honors</h2>
-            <ul class="plain cols" role="list">
-                <li><span class="year">2025</span>IYPT &mdash; Gold Medal &amp; 2nd overall, Team China captain</li>
-                <li><span class="year">2024</span>S.-T. Yau High School Science Award (Physics) Global Finals &mdash; Gold</li>
-                <li><span class="year">2024</span>USAMO &mdash; Qualifier</li>
-                <li><span class="year">2024</span>Duke Math Meet China Regional &mdash; 1st Individual &amp; 1st Team (captain)</li>
-                <li><span class="year">2024</span>HMMT February &mdash; Geometry, 13th of 651</li>
-                <li><span class="year">2024</span>Physics Bowl &mdash; National Gold</li>
-                <li><span class="year">2023</span>AMC 12B &mdash; Perfect Score</li>
-            </ul>
-        </section>
+    <footer id="end">
+        <span>&copy; 2026 Steven (Zixuan) Peng</span>
+        <a href="archive.html">admissions archive</a>
+        <a href="https://github.com/zxpeng2007/portfolio">source</a>
+    </footer>
+</div>
 
-        <section id="education">
-            <h2>Education</h2>
-            <ul class="plain cols" role="list">
-                <li><b>University of Pennsylvania</b> &mdash; B.A. in Physics &amp; Computer Science, Class of 2030</li>
-                <li><b>Nanjing Foreign Language School</b> &mdash; Class of 2026</li>
-            </ul>
-        </section>
+<div id="vig" aria-hidden="true"></div>
+<div id="grain" aria-hidden="true"></div>
 
-        <section id="skills">
-            <h2>Skills</h2>
-            <dl class="pairs">
-                <div>
-                    <dt>Languages</dt>
-                    <dd>Python &middot; C &middot; Assembly &middot; JavaScript &middot; MATLAB &middot; SQL</dd>
-                </div>
-                <div>
-                    <dt>Frameworks &amp; Tools</dt>
-                    <dd>PyTorch &middot; Linux/Unix &middot; MuJoCo &middot; CUDA &middot; ROS2 &middot; Isaac Sim &middot; Weights &amp; Biases &middot; TensorBoard &middot; Postgres</dd>
-                </div>
-            </dl>
-        </section>
-        </main>
+<script>
+(function () {
+    'use strict';
+    var root = document.documentElement;
+    var mqDark = matchMedia('(prefers-color-scheme: dark)');
+    var mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+    function theme() { return root.dataset.theme || (mqDark.matches ? 'dark' : 'light'); }
 
-        <footer>
-            <span>&copy; 2026 Steven (Zixuan) Peng</span>
-            <span><a href="archive.html">admissions archive</a> &middot; <a href="https://github.com/zxpeng2007/portfolio">source</a></span>
-        </footer>
-    </div>
-    <script>
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('video[autoplay]').forEach(function (v) {
-                v.removeAttribute('autoplay');
-                v.pause();
-            });
+    /* ---------- light / dark key ---------- */
+    var btn = document.getElementById('mode');
+    var metaTheme = document.querySelector('meta[name="theme-color"]');
+    function syncTheme() {
+        var dark = theme() === 'dark';
+        btn.dataset.s = dark ? 'dark' : 'light';
+        btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+        metaTheme.setAttribute('content', dark ? '#000000' : '#f3f7fd');
+        if (scene) scene.retheme();
+    }
+    btn.addEventListener('click', function () {
+        var next = theme() === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        syncTheme();
+    });
+    mqDark.addEventListener('change', syncTheme);
+
+    /* ---------- film grain, baked once ---------- */
+    (function () {
+        var c = document.createElement('canvas'), n = 128;
+        c.width = c.height = n;
+        var g = c.getContext('2d');
+        if (!g) return;
+        var im = g.createImageData(n, n), d = im.data;
+        for (var i = 0; i < d.length; i += 4) {
+            var v = Math.random() < .5 ? 0 : 255;
+            d[i] = d[i + 1] = d[i + 2] = v;
+            d[i + 3] = (Math.random() * 255) | 0;
         }
-    </script>
+        g.putImageData(im, 0, 0);
+        document.getElementById('grain').style.backgroundImage = 'url(' + c.toDataURL() + ')';
+    })();
+
+    /* ---------- the scene: an atom over a simulation mesh, a robot watching a ball ---------- */
+    var scene = (function () {
+        var cv = document.getElementById('gl');
+        var g = cv.getContext && cv.getContext('2d');
+        if (!g) return null;
+        var TAU = Math.PI * 2;
+        var PAL = {
+            light: {
+                sky: ['#fbfdff', '#eef4fc', '#dbe8f8'], dust: '58,118,214',
+                halo: '#bde8f4', halo2: '#e4f7fc',
+                floor: ['#e2edfa', '#cfe0f5'], grid: '74,132,214', gridA: .42, horizon: '#b9d3f0',
+                orbit: '#4fb9c9', orbitBack: 'rgba(79,185,201,.42)', glow: 'rgba(127,217,228,.5)', glow0: 'rgba(127,217,228,0)',
+                e: '#1d5fd6', p: ['#1f3fb6', '#4b74e4', '#b4d0ff'], n: ['#3e93bb', '#7ccfe3', '#e4fbff'],
+                ball: '#ffffff', ballEdge: '#2f63c4', trail: '47,99,196',
+                bot: ['#2a49b0', '#5a83df', '#a9c7f7'], visor: '#0b3a4e', eye: '#7fe9ff', shadow: 'rgba(40,80,160,.2)'
+            },
+            dark: {
+                sky: ['#000000', '#01040c', '#071736'], dust: '255,255,255',
+                moon: '#eef3f9', moonShade: '#b9c8dc',
+                floor: ['#04102a', '#010409'], grid: '70,140,255', gridA: .55, horizon: '#16408a',
+                orbit: '#7fd9e4', orbitBack: 'rgba(127,217,228,.32)', glow: 'rgba(63,108,240,.42)', glow0: 'rgba(63,108,240,0)',
+                e: '#d2f8ff', p: ['#1b3cc0', '#3f6cf0', '#a6c6ff'], n: ['#246f96', '#52b3d6', '#cdf4ff'],
+                ball: '#f4fbff', ballEdge: '#a6c6ff', trail: '150,195,255',
+                bot: ['#1f40b4', '#3d68ea', '#9dc0ff'], visor: '#000a1c', eye: '#7fe9ff', shadow: 'rgba(0,0,0,.55)'
+            }
+        };
+        var NUC = [[0,0,0,1],[1,0,0,0],[-1,0,0,1],[0,1,0,0],[0,-1,0,1],[0,0,1,0],[0,0,-1,1],
+                   [.62,.62,.62,1],[-.62,-.62,.62,0],[.62,-.62,-.62,1],[-.62,.62,-.62,0],[-.62,.62,.62,0],[.62,-.62,.62,1]];
+        var W = 1, H = 1, S = 3, L, P, dark, dust = [], FA = 1;
+        var scrollY = window.scrollY || 0, vh = innerHeight, raf = 0, last = 0, t0 = performance.now(), shown = false;
+
+        function seed() {
+            var n = Math.round(W * H / (dark ? 560 : 950));
+            dust = [];
+            for (var i = 0; i < n; i++) {
+                var big = Math.random() < .12;
+                dust.push({
+                    x: Math.random() * W, y: Math.random() * H,
+                    r: big ? 1.1 + Math.random() * 1.2 : .45 + Math.random() * .6,
+                    ring: big && Math.random() < .6,
+                    ph: Math.random() * TAU, sp: .3 + Math.random() * .9,
+                    a: .25 + Math.random() * .55, d: .3 + Math.random() * .7
+                });
+            }
+        }
+        function size() {
+            var r = cv.getBoundingClientRect();
+            S = innerWidth < 700 ? 2 : 3;
+            W = Math.max(1, Math.round(r.width / S));
+            H = Math.max(1, Math.round(r.height / S));
+            cv.width = W; cv.height = H;
+            vh = innerHeight;
+            var portrait = W < H;
+            var hy = Math.round(H * .78);
+            L = {
+                hy: hy, F: H - hy, vx: W * (portrait ? .5 : .44),
+                atom: portrait ? { x: W * .6, y: H * .45, R: Math.min(W * .33, H * .18) }
+                               : { x: W * .7, y: H * .43, R: Math.min(H * .23, W * .16) },
+                halo: portrait ? { x: W * .82, y: H * .17, r: W * .09 }
+                               : { x: W * .88, y: H * .19, r: Math.min(W * .045, H * .08) },
+                botZ: 1.3, botF: portrait ? -.5 : -.62, ballZ: 1.9
+            };
+            seed();
+        }
+        function proj(X, Z, h) { return [L.vx + X * L.F / Z, L.hy + (1 - (h || 0)) * L.F / Z]; }
+        function span(Z) { return Math.max(L.vx, W - L.vx) / L.F * Z + .25; }
+        function ballAt(s, sp) {
+            var X = -sp + (((s % (2 * sp)) + 2 * sp) % (2 * sp));
+            var k = (X + sp) / .95, f = k - Math.floor(k);
+            return { X: X, h: .55 * 4 * f * (1 - f) };
+        }
+
+        function drawDust(t, par) {
+            var c = 'rgb(' + P.dust + ')';
+            g.fillStyle = c; g.strokeStyle = c; g.lineWidth = .8;
+            for (var i = 0; i < dust.length; i++) {
+                var d = dust[i];
+                var x = d.x + Math.sin(t * .07 * d.sp + d.ph) * 4 * d.d;
+                var y = d.y - (dark ? 0 : t * 1.1 * d.sp) - par * .25 * d.d;
+                y = ((y % H) + H) % H;
+                var a = d.a * (dark ? .55 + .45 * Math.sin(t * 1.7 * d.sp + d.ph) : .75 + .25 * Math.sin(t * .9 * d.sp + d.ph));
+                g.globalAlpha = a;
+                if (d.ring && !dark) {
+                    g.beginPath(); g.arc(x, y, d.r * 1.9, 0, TAU); g.stroke();
+                    g.fillRect(x - .5, y - .5, 1, 1);
+                } else {
+                    g.beginPath(); g.arc(x, y, d.r, 0, TAU); g.fill();
+                    if (dark && d.r > 1.5) {
+                        g.globalAlpha = a * .45;
+                        g.fillRect(x - d.r * 2.4, y - .4, d.r * 4.8, .8);
+                        g.fillRect(x - .4, y - d.r * 2.4, .8, d.r * 4.8);
+                    }
+                }
+            }
+            g.globalAlpha = 1;
+        }
+        function drawHalo() {
+            var h = L.halo;
+            g.globalAlpha = FA;
+            if (!dark) {
+                g.strokeStyle = P.halo; g.lineWidth = h.r * .34;
+                g.beginPath(); g.ellipse(h.x, h.y, h.r, h.r * .8, -.15, 0, TAU); g.stroke();
+                g.strokeStyle = P.halo2; g.lineWidth = Math.max(1, h.r * .08);
+                g.beginPath(); g.ellipse(h.x, h.y, h.r * .93, h.r * .73, -.15, 0, TAU); g.stroke();
+            } else {
+                var gl = g.createRadialGradient(h.x, h.y, h.r * .8, h.x, h.y, h.r * 2.6);
+                gl.addColorStop(0, 'rgba(190,220,255,.16)'); gl.addColorStop(1, 'rgba(190,220,255,0)');
+                g.fillStyle = gl; g.fillRect(h.x - h.r * 3, h.y - h.r * 3, h.r * 6, h.r * 6);
+                var gr = g.createRadialGradient(h.x - h.r * .35, h.y - h.r * .35, h.r * .1, h.x, h.y, h.r * 1.1);
+                gr.addColorStop(0, '#ffffff'); gr.addColorStop(.65, P.moon); gr.addColorStop(1, P.moonShade);
+                g.fillStyle = gr;
+                g.beginPath(); g.ellipse(h.x, h.y, h.r * 1.05, h.r * .86, -.15, 0, TAU); g.fill();
+                g.fillStyle = 'rgba(120,145,185,.22)';
+                [[.32, -.18, .2], [-.28, .16, .13], [.12, .38, .1], [-.05, -.42, .08]].forEach(function (c) {
+                    g.beginPath(); g.arc(h.x + c[0] * h.r, h.y + c[1] * h.r, c[2] * h.r, 0, TAU); g.fill();
+                });
+            }
+        }
+        function drawFloor(t) {
+            var hy = L.hy, F = L.F;
+            g.globalAlpha = FA;
+            var fg = g.createLinearGradient(0, hy, 0, H);
+            fg.addColorStop(0, P.floor[0]); fg.addColorStop(1, P.floor[1]);
+            g.fillStyle = fg; g.fillRect(0, hy, W, H - hy + 2);
+            g.save();
+            g.beginPath(); g.rect(0, hy, W, H - hy + 2); g.clip();
+            var cell = .5, zn = .8, zf = 26, off = (t * .12) % cell, xl = span(zn) * 3;
+            g.strokeStyle = 'rgba(' + P.grid + ',' + P.gridA + ')'; g.lineWidth = 1;
+            g.beginPath();
+            var a, b, X, Z, n;
+            for (X = -Math.ceil(xl / cell) * cell; X <= xl; X += cell) {           // depth lines
+                a = proj(X, zn); b = proj(X, zf); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]);
+            }
+            for (Z = cell - off; Z < zf; Z += cell) {                                 // cross lines
+                if (Z < zn * .6) continue;
+                var y = hy + F / Z; g.moveTo(0, y); g.lineTo(W, y);
+            }
+            for (n = -Math.ceil((xl + zf) / cell); n * cell <= xl; n++) {            // diagonals: a triangulated mesh
+                a = proj(n * cell + zn + off, zn); b = proj(n * cell + zf + off, zf);
+                g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]);
+            }
+            g.stroke();
+            var fade = g.createLinearGradient(0, hy, 0, hy + (H - hy) * .5);
+            fade.addColorStop(0, P.floor[0]); fade.addColorStop(1, dark ? 'rgba(4,16,42,0)' : 'rgba(226,237,250,0)');
+            g.fillStyle = fade; g.fillRect(0, hy, W, (H - hy) * .5);
+            g.restore();
+            g.fillStyle = P.horizon; g.fillRect(0, hy, W, 1);
+        }
+        function drawBall(t) {
+            var Z = L.ballZ, sp = span(Z), s = t * 1.5 + sp * .55, cur = ballAt(s, sp);
+            var r = .06 * L.F / Z, i, q, pt;
+            g.fillStyle = 'rgb(' + P.trail + ')';
+            for (i = 34; i >= 1; i--) {                                               // the tracked trajectory
+                q = ballAt(s - i * .09, sp);
+                if (q.X > cur.X) continue;
+                pt = proj(q.X, Z, q.h);
+                g.globalAlpha = FA * (1 - i / 35) * .9;
+                g.fillRect(Math.round(pt[0]), Math.round(pt[1] - r), 1, 1);
+            }
+            var gp = proj(cur.X, Z, 0);
+            g.globalAlpha = FA * (1 - cur.h * 1.4);
+            g.fillStyle = P.shadow;
+            g.beginPath(); g.ellipse(gp[0], gp[1], r * 1.3 * (1 - cur.h * .6), r * .4, 0, 0, TAU); g.fill();
+            pt = proj(cur.X, Z, cur.h);
+            g.globalAlpha = FA;
+            g.fillStyle = P.ball; g.strokeStyle = P.ballEdge; g.lineWidth = 1;
+            g.beginPath(); g.arc(pt[0], pt[1] - r, r, 0, TAU); g.fill(); g.stroke();
+            return cur.X;
+        }
+        function drawBot(t, ballX) {
+            var Z = L.botZ, X = L.botF * (L.vx / L.F) * Z;
+            var base = proj(X, Z, 0), k = .95 * L.F / Z, bx = base[0], by = base[1];
+            var look = Math.max(-1, Math.min(1, (ballX - X) / 1.6));
+            var c = P.bot;
+            function R(x0, y0, x1, y1, col) { g.fillStyle = col; g.fillRect(bx + x0 * k, by - y1 * k, (x1 - x0) * k, (y1 - y0) * k); }
+            g.globalAlpha = FA;
+            g.fillStyle = P.shadow; g.beginPath(); g.ellipse(bx, by, .3 * k, .05 * k, 0, 0, TAU); g.fill();
+            R(-.13, 0, -.03, .38, c[1]); R(.03, 0, .13, .38, c[1]);                   // legs
+            R(-.13, 0, -.105, .38, c[0]); R(.03, 0, .055, .38, c[0]);
+            R(-.12, .19, -.04, .22, c[2]); R(.04, .19, .12, .22, c[2]);               // knees
+            R(-.17, 0, -.02, .05, c[0]); R(.02, 0, .17, .05, c[0]);                   // feet
+            R(-.15, .36, .15, .45, c[0]);                                              // pelvis
+            var sw = Math.sin(t * 1.6) * .03;
+            g.strokeStyle = c[0]; g.lineWidth = .075 * k; g.lineCap = 'round'; g.lineJoin = 'round';
+            g.beginPath(); g.moveTo(bx - .21 * k, by - .69 * k); g.lineTo(bx - .26 * k, by - .54 * k); g.lineTo(bx - .23 * k, by - (.4 + sw) * k); g.stroke();
+            g.beginPath(); g.moveTo(bx + .21 * k, by - .69 * k); g.lineTo(bx + .26 * k, by - .54 * k); g.lineTo(bx + .24 * k, by - (.41 - sw) * k); g.stroke();
+            R(-.18, .44, .18, .73, c[1]); R(-.18, .44, -.15, .73, c[0]); R(-.15, .7, .18, .73, c[2]);   // torso
+            R(-.09, .53, .09, .65, c[2]); R(-.03, .57, .03, .61, (Math.sin(t * 2.2) > 0) ? P.eye : c[0]);
+            R(-.25, .63, -.17, .74, c[1]); R(.17, .63, .25, .74, c[1]);              // shoulders
+            R(-.04, .72, .04, .78, c[0]);                                              // neck
+            R(-.13, .77, .13, .99, c[1]); R(-.13, .77, -.11, .99, c[0]); R(-.11, .97, .13, .99, c[2]);  // head
+            R(-.11, .83, .11, .93, P.visor);                                           // visor
+            if ((t % 4.3) > .14) { var ex = look * .06; R(ex - .035, .86, ex + .035, .9, P.eye); }
+            R(-.008, .99, .008, 1.07, c[0]);                                           // antenna
+            g.fillStyle = Math.sin(t * 3) > 0 ? P.eye : c[2];
+            g.beginPath(); g.arc(bx, by - 1.09 * k, .024 * k, 0, TAU); g.fill();
+        }
+        function drawAtom(t) {
+            var A = L.atom, R = A.R, r = R * .3, x = A.x, y = A.y + Math.sin(t * .6) * R * .03, base = .5 + t * .05;
+            g.globalAlpha = FA;
+            var gl = g.createRadialGradient(x, y, 0, x, y, R * .6);
+            gl.addColorStop(0, P.glow); gl.addColorStop(1, P.glow0);
+            g.fillStyle = gl; g.fillRect(x - R, y - R, 2 * R, 2 * R);
+            var orb = [0, 1, 2].map(function (i) { return { a: base + i * TAU / 3, sp: .9 + .22 * i, ph: i * 2.3 }; });
+            var lw = Math.max(1, R * .018), er = Math.max(1.4, R * .028);
+            function electrons(front) {
+                orb.forEach(function (o) {
+                    var th = t * o.sp + o.ph;
+                    if ((Math.sin(th) > 0) !== front) return;
+                    g.fillStyle = P.e;
+                    for (var k = 6; k >= 0; k--) {
+                        var tk = th - k * .07, ca = Math.cos(tk), sa = Math.sin(tk);
+                        var ex = x + R * ca * Math.cos(o.a) - r * sa * Math.sin(o.a);
+                        var ey = y + R * ca * Math.sin(o.a) + r * sa * Math.cos(o.a);
+                        g.globalAlpha = FA * (k ? .5 - k * .065 : 1);
+                        g.beginPath(); g.arc(ex, ey, k ? er * .55 : er, 0, TAU); g.fill();
+                    }
+                });
+                g.globalAlpha = FA;
+            }
+            g.lineWidth = lw; g.strokeStyle = P.orbitBack;
+            orb.forEach(function (o) { g.beginPath(); g.ellipse(x, y, R, r, o.a, Math.PI, TAU); g.stroke(); });
+            electrons(false);
+            var rn = R * .115, ay = t * .4, ax = .5, cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
+            NUC.map(function (p) {
+                var X = p[0] * cy + p[2] * sy, Z = -p[0] * sy + p[2] * cy;
+                return [X, p[1] * cx - Z * sx, p[1] * sx + Z * cx, p[3]];
+            }).sort(function (a, b) { return a[2] - b[2]; }).forEach(function (p) {
+                var px = x + p[0] * rn * .95, py = y + p[1] * rn * .95, rr = rn * (1 + p[2] * .08), col = p[3] ? P.p : P.n;
+                var gr = g.createRadialGradient(px - rr * .35, py - rr * .4, rr * .1, px, py, rr);
+                gr.addColorStop(0, col[2]); gr.addColorStop(.45, col[1]); gr.addColorStop(1, col[0]);
+                g.fillStyle = gr; g.beginPath(); g.arc(px, py, rr, 0, TAU); g.fill();
+            });
+            g.lineWidth = lw; g.strokeStyle = P.orbit;
+            orb.forEach(function (o) { g.beginPath(); g.ellipse(x, y, R, r, o.a, 0, Math.PI); g.stroke(); });
+            electrons(true);
+        }
+        function draw(t) {
+            var par = Math.min(scrollY, vh * 1.5) / S;
+            FA = Math.max(0, 1 - scrollY / (vh * .95));
+            var sky = g.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, P.sky[0]); sky.addColorStop(.6, P.sky[1]); sky.addColorStop(1, P.sky[2]);
+            g.globalAlpha = 1; g.fillStyle = sky; g.fillRect(0, 0, W, H);
+            drawDust(t, par);
+            if (FA > 0) {
+                g.save(); g.translate(0, -par * .55);
+                drawHalo(); drawFloor(t);
+                var bx = drawBall(t);
+                drawBot(t, bx); drawAtom(t);
+                g.restore();
+                g.globalAlpha = 1;
+            }
+            if (!shown) { shown = true; root.classList.add('glon'); }
+        }
+        function loop(now) {
+            raf = requestAnimationFrame(loop);
+            if (now - last < 32) return;
+            last = now; draw((now - t0) / 1000);
+        }
+        function still() { draw(9); }
+        function start() {
+            cancelAnimationFrame(raf); raf = 0;
+            if (mqReduce.matches) still(); else raf = requestAnimationFrame(loop);
+        }
+        function retheme() { dark = theme() === 'dark'; P = PAL[dark ? 'dark' : 'light']; seed(); if (mqReduce.matches) still(); }
+
+        dark = theme() === 'dark'; P = PAL[dark ? 'dark' : 'light'];
+        size(); start();
+        var rt = 0;
+        addEventListener('resize', function () {
+            cancelAnimationFrame(rt);
+            rt = requestAnimationFrame(function () { size(); if (mqReduce.matches) still(); });
+        });
+        addEventListener('scroll', function () {
+            scrollY = window.scrollY;
+            if (mqReduce.matches) requestAnimationFrame(still);
+        }, { passive: true });
+        mqReduce.addEventListener('change', start);
+        return { retheme: retheme };
+    })();
+    syncTheme();
+
+    /* ---------- windows can be picked up by their title bars ---------- */
+    var wins = [].slice.call(document.querySelectorAll('#desk .win'));
+    function overlaps() {
+        var rs = wins.map(function (w) { return w.getBoundingClientRect(); });
+        wins.forEach(function (w, i) {
+            var zi = +w.style.zIndex || 0, ov = false;
+            wins.forEach(function (v, j) {
+                if (i === j) return;
+                var zj = +v.style.zIndex || 0, a = rs[i], b = rs[j];
+                var above = zi > zj || (zi === zj && i > j);
+                if (above && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) ov = true;
+            });
+            w.classList.toggle('ov', ov);
+        });
+    }
+    var z = 10, canDrag = matchMedia('(pointer: fine)');
+    wins.forEach(function (w) {
+        var bar = w.querySelector('.bar'), id = null, sx = 0, sy = 0, ox = 0, oy = 0;
+        bar.addEventListener('pointerdown', function (e) {
+            if (!canDrag.matches || innerWidth < 900 || e.button !== 0 || e.target.closest('a,button')) return;
+            id = e.pointerId; bar.setPointerCapture(id);
+            sx = e.clientX - ox; sy = e.clientY - oy;
+            w.style.zIndex = ++z; w.classList.add('drag'); root.classList.add('dragging');
+            e.preventDefault();
+        });
+        bar.addEventListener('pointermove', function (e) {
+            if (e.pointerId !== id) return;
+            ox = e.clientX - sx; oy = e.clientY - sy;
+            w.style.translate = ox + 'px ' + oy + 'px';
+        });
+        function drop(e) {
+            if (e.pointerId !== id) return;
+            id = null; w.classList.remove('drag'); root.classList.remove('dragging');
+            overlaps();
+        }
+        bar.addEventListener('pointerup', drop);
+        bar.addEventListener('pointercancel', drop);
+        bar.addEventListener('dblclick', function () { ox = oy = 0; w.style.translate = ''; overlaps(); });
+        w.resetDrag = function () { ox = oy = 0; w.style.translate = ''; w.style.zIndex = ''; };
+    });
+    addEventListener('resize', function () {
+        if (innerWidth < 900) { wins.forEach(function (w) { w.resetDrag(); }); overlaps(); }
+    });
+
+    /* ---------- the robot video: a key to pause it, and still under reduced motion ---------- */
+    document.querySelectorAll('button.vid').forEach(function (b) {
+        var v = b.querySelector('video'), label = b.getAttribute('aria-label').replace(/^Pause /, '');
+        function sync() { b.classList.toggle('paused', v.paused); b.setAttribute('aria-label', (v.paused ? 'Play ' : 'Pause ') + label); }
+        if (mqReduce.matches) { v.removeAttribute('autoplay'); v.pause(); }
+        b.addEventListener('click', function () { if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); });
+        v.addEventListener('play', sync); v.addEventListener('pause', sync);
+        sync();
+    });
+})();
+</script>
 </body>
 </html>
