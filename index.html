@@ -353,7 +353,7 @@ html.dragging, html.dragging * { cursor: move !important; user-select: none; }
                         <img class="avatar" src="images/intern001.jpg" width="1280" height="1591" alt="Steven Peng holding a small humanoid robot at the Horizon Robotics lab">
                     </div>
                     <p class="bio">I work on humanoid robotics, motion generation and physics-based AI &mdash; most recently teaching a Unitree G1 to play table tennis. Now I&rsquo;m founder and CEO of Atom Industries, a two-person startup building Atom, which lets engineers use AI to build simulations and checks every answer before anyone relies on it. Before Penn, I captained China&rsquo;s national team at the International Young Physicists&rsquo; Tournament.</p>
-                    <p class="aff"><a href="https://www.upenn.edu/">University of Pennsylvania</a> &middot; <a href="https://atomindustries.co">Atom Industries</a> &middot; <a href="https://github.com/HorizonRobotics">Horizon Robotics</a></p>
+                    <p class="aff"><a href="https://www.upenn.edu/">University of Pennsylvania</a> &middot; <a href="https://atomindustries.co">Atom Industries</a> &middot; <a href="https://elodin.systems">Elodin</a> &middot; <a href="https://github.com/HorizonRobotics">Horizon Robotics</a></p>
                     <ul class="links">
                         <li><a href="mailto:zxpeng2007@gmail.com" aria-label="Email"><span class="k-glass"><svg class="px" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M0 3h16v1h-16zM0 4h2v1h-2zM14 4h2v1h-2zM0 5h1v1h-1zM2 5h1v1h-1zM13 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM3 6h1v1h-1zM12 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM4 7h1v1h-1zM11 7h1v1h-1zM15 7h1v1h-1zM0 8h1v1h-1zM5 8h1v1h-1zM10 8h1v1h-1zM15 8h1v1h-1zM0 9h1v1h-1zM6 9h4v1h-4zM15 9h1v1h-1zM0 10h1v1h-1zM15 10h1v1h-1zM0 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM15 12h1v1h-1zM0 13h16v1h-16z"/></svg></span></a></li>
                         <li><a href="https://github.com/zxpeng2007" aria-label="GitHub"><span class="k-glass"><svg class="px" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M5 0h6v1h-6zM3 1h10v1h-10zM2 2h12v1h-12zM1 3h2v1h-2zM4 3h8v1h-8zM13 3h2v1h-2zM1 4h2v1h-2zM13 4h2v1h-2zM0 5h2v1h-2zM14 5h2v1h-2zM0 6h2v1h-2zM14 6h2v1h-2zM0 7h2v1h-2zM14 7h2v1h-2zM0 8h2v1h-2zM14 8h2v1h-2zM0 9h2v1h-2zM14 9h2v1h-2zM1 10h2v1h-2zM13 10h2v1h-2zM1 11h1v1h-1zM3 11h3v1h-3zM10 11h5v1h-5zM2 12h1v1h-1zM4 12h3v1h-3zM9 12h5v1h-5zM3 13h4v1h-4zM9 13h4v1h-4zM5 14h2v1h-2zM9 14h2v1h-2z"/></svg></span></a></li>
@@ -363,8 +363,13 @@ html.dragging, html.dragging * { cursor: move !important; user-select: none; }
             </section>
 
             <section class="win cols" id="experience" aria-labelledby="t-exp">
-                <header class="bar"><h2 id="t-exp">Experience</h2><span class="k">03</span></header>
+                <header class="bar"><h2 id="t-exp">Experience</h2><span class="k">04</span></header>
                 <ul class="rows">
+                    <li>
+                        <p class="t"><span>Elodin</span><span class="k">now</span></p>
+                        <p class="s">Intern</p>
+                        <p class="d">Work across Elodin&rsquo;s simulation and flight-software stack: fixed two gather miscompiles in the Cranelift JIT (<a href="https://github.com/elodin-sys/elodin/pull/944">merged</a>), and built <a href="https://github.com/elodin-sys/elodin/pull/930">drone-policy</a>, a learned throw-recovery policy &mdash; PPO trained on JAX, deployed through the same JIT at 334&times; real time, with bit-for-bit parity tests.</p>
+                    </li>
                     <li>
                         <p class="t"><span>Horizon Robotics</span><span class="k">2026</span></p>
                         <p class="s">Robotics Lab Intern, Physics &amp; AI &middot; Beijing</p>
@@ -458,7 +463,7 @@ html.dragging, html.dragging * { cursor: move !important; user-select: none; }
             </section>
 
             <section class="win" id="projects" aria-labelledby="t-projects">
-                <header class="bar"><h2 id="t-projects">Projects</h2><span class="k">06</span></header>
+                <header class="bar"><h2 id="t-projects">Projects</h2><span class="k">05</span></header>
                 <ol class="rows num">
                     <li>
                         <span class="n">01</span>
@@ -471,34 +476,26 @@ html.dragging, html.dragging * { cursor: move !important; user-select: none; }
                     <li>
                         <span class="n">02</span>
                         <div>
-                            <p class="t"><span>Elodin</span><span class="k">2026</span></p>
-                            <p class="s">Open-source contributions</p>
-                            <p class="d">Work on Elodin&rsquo;s simulation and flight-software stack: fixed two gather miscompiles in the Cranelift JIT (<a href="https://github.com/elodin-sys/elodin/pull/944">merged</a>), found by moving multi-drone worlds onto it; proposed <a href="https://github.com/elodin-sys/elodin/pull/930">drone-policy</a>, a learned throw-recovery policy &mdash; PPO trained on JAX, deployed through the same JIT at 334&times; real time, with bit-for-bit parity tests.</p>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="n">03</span>
-                        <div>
                             <p class="t"><span>omnisens</span><span class="k">2026</span></p>
                             <p class="d">Per-direction mouse sensitivity for any mouse: a desktop app, a browser calibration tool and a tiny RP2040 USB adapter that corrects your aim in firmware. <a href="https://github.com/zxpeng2007/omnisens">GitHub</a>.</p>
                         </div>
                     </li>
                     <li>
-                        <span class="n">04</span>
+                        <span class="n">03</span>
                         <div>
                             <p class="t"><span>Murus</span><span class="k">2026</span></p>
                             <p class="d">A self-hostable arena for the wall game: humans and engines on one Glicko-2 ladder with a lichess-style bot API; the house bot is my <a href="https://github.com/zxpeng2007/quoridor-alphazero">AlphaZero network</a>. Live at <a href="https://murus.net">murus.net</a>.</p>
                         </div>
                     </li>
                     <li>
-                        <span class="n">05</span>
+                        <span class="n">04</span>
                         <div>
                             <p class="t"><span>Intern Radar</span><span class="k">2026</span></p>
                             <p class="d">An internship tracker that merges the big GitHub lists with employers&rsquo; own job boards, filters to what you can actually apply to, and updates an iPhone widget. <a href="https://github.com/zxpeng2007/intern-radar">GitHub</a>.</p>
                         </div>
                     </li>
                     <li>
-                        <span class="n">06</span>
+                        <span class="n">05</span>
                         <div>
                             <p class="t"><span>Brodie Dance</span><span class="k">2026</span></p>
                             <p class="s">IvyHacks 2026</p>
